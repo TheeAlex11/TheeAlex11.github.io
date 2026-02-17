@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Agenda Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.0/css/all.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow: hidden;
+            background: #0a140f;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        html::-webkit-scrollbar { display: none; }
+        html.loaded {
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-image: url('https://theealex11.github.io/assets/images/bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            padding: 64px 24px;
+            position: relative;
+            overflow: hidden;
+            background-color: #0f1917;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        body.loaded {
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 25, 20, 0.75);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 0;
+        }
+
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(34, 197, 94, 0.5);
+            }
+        }
+
+        @keyframes iconPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes fadeInItem {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-28px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes revealUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Animaciones de elementos internos del card ── */
+        /* Solo afectan a elementos DENTRO de .glass-card, nunca al modal */
+        .glass-card .form-group,
+        .glass-card .btn-primary,
+        .glass-card .stat-card,
+        .glass-card .btn-filter,
+        .glass-card .card-title {
+            opacity: 0;
+        }
+        .glass-card.animate .card-title {
+            animation: slideInLeft 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.05s;
+        }
+        .glass-card.animate .form-group:nth-child(1) {
+            animation: revealUp 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.15s;
+        }
+        .glass-card.animate .form-group:nth-child(2) {
+            animation: revealUp 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.23s;
+        }
+        .glass-card.animate .form-group:nth-child(3) {
+            animation: revealUp 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.31s;
+        }
+        .glass-card.animate .form-group:nth-child(4) {
+            animation: revealUp 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.39s;
+        }
+        .glass-card.animate .btn-primary {
+            animation: revealUp 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.47s;
+        }
+        /* Stats escalonadas */
+        .glass-card.animate .stat-card:nth-child(1) {
+            animation: revealUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.15s;
+        }
+        .glass-card.animate .stat-card:nth-child(2) {
+            animation: revealUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.25s;
+        }
+        .glass-card.animate .stat-card:nth-child(3) {
+            animation: revealUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.35s;
+        }
+        /* Filtros escalonados */
+        .glass-card.animate .btn-filter:nth-child(1) {
+            animation: revealUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.42s;
+        }
+        .glass-card.animate .btn-filter:nth-child(2) {
+            animation: revealUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.50s;
+        }
+        .glass-card.animate .btn-filter:nth-child(3) {
+            animation: revealUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.58s;
+        }
+        .glass-card.animate .btn-filter:nth-child(4) {
+            animation: revealUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+            animation-delay: 0.66s;
+        }
+
+        /* ── Modal de edición ── */
+        .modal-edit-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 12, 8, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 20px;
+        }
+        .modal-edit-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-edit-box {
+            background: rgba(14, 22, 17, 0.97);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 24px;
+            padding: 40px 36px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,197,94,0.1);
+            transform: scale(0.9) translateY(24px);
+            transition: transform 0.38s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .modal-edit-overlay.show .modal-edit-box {
+            transform: scale(1) translateY(0);
+        }
+        .modal-edit-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+        .modal-edit-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #22c55e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-edit-close {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: rgba(255,255,255,0.6);
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        .modal-edit-close:hover {
+            background: rgba(255,255,255,0.12);
+            color: white;
+        }
+        .modal-edit-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+        .modal-btn-save {
+            flex: 1;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            box-shadow: 0 4px 18px rgba(34,197,94,0.35);
+        }
+        .modal-btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(34,197,94,0.5);
+        }
+
+        /* Font Awesome Duotone — base */
+        .fad {
+            --fa-primary-color: #22c55e;
+            --fa-secondary-color: #16a34a;
+            --fa-primary-opacity: 0.95;
+            --fa-secondary-opacity: 0.45;
+        }
+
+        /* Iconos dentro de botones activos (fondo verde → icono blanco) */
+        .btn-filter.active .fad,
+        .btn-filter.active i,
+        .btn-primary .fad,
+        .btn-primary i {
+            --fa-primary-color: #ffffff;
+            --fa-secondary-color: rgba(255,255,255,0.6);
+            color: #ffffff;
+        }
+
+        /* Iconos en btn-complete (fondo verde suave → usar blanco puro) */
+        .btn-complete .fad,
+        .btn-complete i {
+            --fa-primary-color: #ffffff;
+            --fa-secondary-color: rgba(255,255,255,0.55);
+            color: #ffffff;
+        }
+
+        /* Iconos en btn-edit (azul) */
+        .btn-edit .fad,
+        .btn-edit i {
+            --fa-primary-color: #93c5fd;
+            --fa-secondary-color: #60a5fa;
+            color: #93c5fd;
+        }
+
+        /* Iconos en btn-delete (rojo) */
+        .btn-delete .fad,
+        .btn-delete i {
+            --fa-primary-color: #fca5a5;
+            --fa-secondary-color: #f87171;
+            color: #fca5a5;
+        }
+
+        /* Iconos en modal-btn-save (blanco) */
+        .modal-btn-save .fad,
+        .modal-btn-save i,
+        .modal-btn-delete .fad,
+        .modal-btn-delete i {
+            --fa-primary-color: #ffffff;
+            --fa-secondary-color: rgba(255,255,255,0.6);
+            color: #ffffff;
+        }
+
+        .icon-pulse {
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            opacity: 0;
+        }
+        .header.animate {
+            animation: fadeInDown 0.7s ease forwards;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #22c55e;
+            margin-bottom: 16px;
+            text-shadow: 0 0 40px rgba(34, 197, 94, 0.5);
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: rgba(20, 30, 24, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        0 0 0 1px rgba(34, 197, 94, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+        .glass-card.animate {
+            animation: scaleIn 0.7s ease forwards;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4),
+                        0 0 0 1px rgba(34, 197, 94, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #22c55e;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-title i {
+            font-size: 1.5rem;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 32px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            color: #22c55e;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(34, 197, 94, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-control:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15),
+                        0 0 30px rgba(34, 197, 94, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .form-control.typing {
+            animation: glow 1.5s ease-in-out infinite;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        select.form-control option {
+            background: #0f1917;
+            color: white;
+        }
+
+        /* Button */
+        .btn-primary {
+            width: 100%;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(34, 197, 94, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(34, 197, 94, 0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #22c55e;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .btn-filter {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.7);
+            border: 2px solid rgba(34, 197, 94, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-filter:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #22c55e;
+        }
+
+        .btn-filter.active {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+        }
+
+        /* Tasks List */
+        .tasks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-height: 700px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .tasks-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .tasks-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .tasks-list::-webkit-scrollbar-thumb {
+            background: rgba(34, 197, 94, 0.3);
+            border-radius: 10px;
+        }
+
+        .tasks-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(34, 197, 94, 0.5);
+        }
+
+        .task-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            animation: fadeInItem 0.5s ease forwards;
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #22c55e;
+            transform: translateX(8px);
+            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.2);
+        }
+
+        .task-item.completed {
+            opacity: 0.5;
+            border-color: rgba(34, 197, 94, 0.1);
+        }
+
+        .task-item.completed:hover {
+            opacity: 0.7;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            gap: 12px;
+        }
+
+        .task-title {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .task-item.completed .task-title {
+            text-decoration: line-through;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .task-priority {
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .priority-alta {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .priority-media {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .priority-baja {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .task-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .task-meta i {
+            margin-right: 6px;
+            color: #22c55e;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-action {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-complete {
+            background: rgba(34, 197, 94, 0.2);
+            color: #ffffff;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-complete:hover {
+            background: rgba(34, 197, 94, 0.35);
+            box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-edit {
+            background: rgba(99, 179, 237, 0.12);
+            color: #93c5fd;
+            border: 1px solid rgba(99, 179, 237, 0.3);
+        }
+
+        .btn-edit:hover {
+            background: rgba(99, 179, 237, 0.22);
+            box-shadow: 0 4px 16px rgba(99, 179, 237, 0.2);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.12);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.22);
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            margin-bottom: 24px;
+            opacity: 0.3;
+            color: #22c55e;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* ── Loading Screen ── */
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: #0a140f;
+            background-image: url('https://theealex11.github.io/assets/images/bg.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+        }
+        .loading-screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 20, 15, 0.85);
+            backdrop-filter: blur(8px);
+        }
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loading-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+        }
+        .loading-logo {
+            font-size: 5rem;
+            color: #22c55e;
+            filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.6));
+            animation: iconPulse 1.6s ease-in-out infinite;
+        }
+        .loading-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #22c55e;
+            text-shadow: 0 0 40px rgba(34, 197, 94, 0.5);
+            letter-spacing: -1px;
+            text-align: center;
+        }
+        .loading-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            text-align: center;
+        }
+        .loading-bar-wrap {
+            width: 260px;
+            height: 4px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #22c55e, #4ade80);
+            border-radius: 99px;
+            transition: width 0.12s linear;
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.7);
+        }
+        .loading-percent {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #22c55e;
+            letter-spacing: 1px;
+        }
+
+        /* ── Custom confirm modal ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 12, 8, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-box {
+            background: rgba(18, 28, 22, 0.95);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 24px;
+            padding: 40px 36px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(34, 197, 94, 0.1);
+            transform: scale(0.88) translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        }
+        .modal-overlay.show .modal-box {
+            transform: scale(1) translateY(0);
+        }
+        .modal-icon {
+            font-size: 3.2rem;
+            color: #ef4444;
+            margin-bottom: 20px;
+            display: block;
+            filter: drop-shadow(0 0 16px rgba(239, 68, 68, 0.5));
+        }
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+        }
+        .modal-desc {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.55);
+            margin-bottom: 32px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+        .modal-task-name {
+            color: #22c55e;
+            font-weight: 700;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+        }
+        .modal-btn {
+            padding: 13px 28px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-btn-cancel {
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .modal-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .modal-btn-delete {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: white;
+            box-shadow: 0 4px 18px rgba(239, 68, 68, 0.35);
+        }
+        .modal-btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(239, 68, 68, 0.5);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 32px 16px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .glass-card {
+                padding: 24px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-buttons {
+                justify-content: center;
+            }
+
+            .task-header {
+                flex-direction: column;
+            }
+
+            .task-actions {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .glass-card {
+                padding: 20px;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo"><i class="fad fa-calendar-check"></i></div>
+            <div>
+                <div class="loading-title">Mi Agenda Digital</div>
+                <div class="loading-subtitle">Cargando tu espacio de trabajo...</div>
+            </div>
+            <div class="loading-bar-wrap">
+                <div class="loading-bar" id="loadingBar"></div>
+            </div>
+            <div class="loading-percent" id="loadingPercent">0%</div>
+        </div>
+    </div>
+
+    <!-- Custom Delete Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-box">
+            <i class="fad fa-trash-alt modal-icon"></i>
+            <div class="modal-title">¿Eliminar tarea?</div>
+            <div class="modal-desc">Vas a eliminar "<span class="modal-task-name" id="modalTaskName"></span>". Esta acción no se puede deshacer.</div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="modalCancel">
+                    <i class="fad fa-times"></i> Cancelar
+                </button>
+                <button class="modal-btn modal-btn-delete" id="modalConfirm">
+                    <i class="fad fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div class="modal-edit-overlay" id="editModal">
+        <div class="modal-edit-box">
+            <div class="modal-edit-header">
+                <div class="modal-edit-title">
+                    <i class="fad fa-pen-to-square"></i> Editar Tarea
+                </div>
+                <button class="modal-edit-close" id="editModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="form-group">
+                <label><i class="fad fa-heading"></i> Título</label>
+                <input type="text" id="editTitle" class="form-control" placeholder="Título de la tarea" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fad fa-align-left"></i> Descripción</label>
+                <textarea id="editDescription" class="form-control" placeholder="Descripción..."></textarea>
+            </div>
+            <div class="form-group">
+                <label><i class="fad fa-calendar"></i> Fecha</label>
+                <input type="date" id="editDate" class="form-control">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+                <label><i class="fad fa-exclamation-circle"></i> Prioridad</label>
+                <select id="editPriority" class="form-control">
+                    <option value="baja">Baja</option>
+                    <option value="media">Media</option>
+                    <option value="alta">Alta</option>
+                </select>
+            </div>
+            <div class="modal-edit-actions">
+                <button class="modal-btn modal-btn-cancel" id="editModalCancel">
+                    <i class="fad fa-times"></i> Cancelar
+                </button>
+                <button class="modal-btn modal-btn-save" id="editModalSave">
+                    <i class="fad fa-floppy-disk"></i> Guardar cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header" id="appHeader">
+            <h1><i class="fad fa-calendar-check icon-pulse"></i> Mi Agenda Digital</h1>
+            <p>Organiza tus tareas de forma inteligente y productiva</p>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Add Task Card -->
+            <div class="glass-card">
+                <h2 class="card-title">
+                    <i class="fad fa-plus-circle"></i>
+                    Nueva Tarea
+                </h2>
+                <form id="taskForm">
+                    <div class="form-group">
+                        <label for="taskTitle"><i class="fad fa-heading"></i> Título</label>
+                        <input type="text" id="taskTitle" class="form-control" placeholder="Ej: Reunión con el equipo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription"><i class="fad fa-align-left"></i> Descripción</label>
+                        <textarea id="taskDescription" class="form-control" placeholder="Detalles de la tarea..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDate"><i class="fad fa-calendar"></i> Fecha</label>
+                        <input type="date" id="taskDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskPriority"><i class="fad fa-exclamation-circle"></i> Prioridad</label>
+                        <select id="taskPriority" class="form-control">
+                            <option value="baja">Baja</option>
+                            <option value="media" selected>Media</option>
+                            <option value="alta">Alta</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fad fa-plus"></i>
+                        Agregar Tarea
+                    </button>
+                </form>
+            </div>
+
+            <!-- Tasks List Card -->
+            <div class="glass-card">
+                <h2 class="card-title">
+                    <i class="fad fa-tasks"></i>
+                    Mis Tareas
+                </h2>
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalTasks">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingTasks">0</div>
+                        <div class="stat-label">Pendientes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completedTasks">0</div>
+                        <div class="stat-label">Completadas</div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filter-buttons">
+                    <button class="btn-filter active" data-filter="todas">
+                        <i class="fad fa-list"></i> Todas
+                    </button>
+                    <button class="btn-filter" data-filter="pendientes">
+                        <i class="fad fa-clock"></i> Pendientes
+                    </button>
+                    <button class="btn-filter" data-filter="completadas">
+                        <i class="fad fa-check-circle"></i> Completadas
+                    </button>
+                    <button class="btn-filter" data-filter="alta">
+                        <i class="fad fa-fire"></i> Alta Prioridad
+                    </button>
+                </div>
+
+                <!-- Tasks Container -->
+                <div class="tasks-list" id="tasksList">
+                    <div class="empty-state">
+                        <i class="fad fa-clipboard-list"></i>
+                        <p>No hay tareas aún. ¡Agrega tu primera tarea!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ─── Loading Screen ─── */
+        (function () {
+            // Bloquear scroll desde el primer instante
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+
+            const bar      = document.getElementById('loadingBar');
+            const pct      = document.getElementById('loadingPercent');
+            const screen   = document.getElementById('loadingScreen');
+            const DURATION = 4000;
+            const INTERVAL = 40;
+            let elapsed = 0;
+
+            const timer = setInterval(() => {
+                elapsed += INTERVAL;
+                const progress = Math.min(elapsed / DURATION * 100, 100);
+                bar.style.width  = progress + '%';
+                pct.textContent  = Math.floor(progress) + '%';
+
+                if (progress >= 100) {
+                    clearInterval(timer);
+                    setTimeout(() => {
+                        screen.classList.add('hidden');
+
+                        // Desbloquear scroll
+                        document.documentElement.classList.add('loaded');
+                        document.body.classList.add('loaded');
+                        document.documentElement.style.overflow = '';
+                        document.body.style.overflow = '';
+
+                        // Animaciones en cascada una vez retirada la loading
+                        setTimeout(() => {
+                            document.getElementById('appHeader').classList.add('animate');
+                        }, 100);
+
+                        setTimeout(() => {
+                            document.querySelectorAll('.glass-card').forEach((card, i) => {
+                                setTimeout(() => card.classList.add('animate'), i * 150);
+                            });
+                        }, 300);
+
+                    }, 200);
+                }
+            }, INTERVAL);
+        })();
+
+        /* ─── Modal helper — Delete ─── */
+        const deleteModal = document.getElementById('deleteModal');
+        const modalTaskName = document.getElementById('modalTaskName');
+        const modalConfirm  = document.getElementById('modalConfirm');
+        const modalCancel   = document.getElementById('modalCancel');
+        let pendingDeleteId = null;
+
+        function showDeleteModal(id, title) {
+            pendingDeleteId = id;
+            modalTaskName.textContent = title;
+            deleteModal.classList.add('show');
+        }
+        function hideDeleteModal() {
+            deleteModal.classList.remove('show');
+            pendingDeleteId = null;
+        }
+        modalCancel.addEventListener('click', hideDeleteModal);
+        deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) hideDeleteModal(); });
+
+        /* ─── Modal helper — Edit ─── */
+        const editModal       = document.getElementById('editModal');
+        const editModalClose  = document.getElementById('editModalClose');
+        const editModalCancel = document.getElementById('editModalCancel');
+        const editModalSave   = document.getElementById('editModalSave');
+        let pendingEditId = null;
+
+        function showEditModal(task) {
+            pendingEditId = task.id;
+            document.getElementById('editTitle').value       = task.title;
+            document.getElementById('editDescription').value = task.description || '';
+            document.getElementById('editDate').value        = task.date;
+            document.getElementById('editPriority').value    = task.priority;
+
+            /* typing glow en inputs del modal */
+            editModal.querySelectorAll('.form-control').forEach(input => {
+                let t;
+                input.oninput = function () {
+                    this.classList.add('typing');
+                    clearTimeout(t);
+                    t = setTimeout(() => this.classList.remove('typing'), 900);
+                };
+            });
+
+            editModal.classList.add('show');
+        }
+        function hideEditModal() {
+            editModal.classList.remove('show');
+            pendingEditId = null;
+        }
+        editModalClose.addEventListener('click',  hideEditModal);
+        editModalCancel.addEventListener('click', hideEditModal);
+        editModal.addEventListener('click', (e) => { if (e.target === editModal) hideEditModal(); });
+
+        editModalSave.addEventListener('click', () => {
+            if (pendingEditId === null) return;
+            const title = document.getElementById('editTitle').value.trim();
+            if (!title) { document.getElementById('editTitle').focus(); return; }
+            // dispara el método de la instancia ya creada
+            taskManager.applyEdit(pendingEditId, {
+                title,
+                description: document.getElementById('editDescription').value.trim(),
+                date:        document.getElementById('editDate').value,
+                priority:    document.getElementById('editPriority').value,
+            });
+            hideEditModal();
+        });
+
+        /* ─── Task Manager ─── */
+        class TaskManager {
+            constructor() {
+                this.tasks = this.loadTasks();
+                this.currentFilter = 'todas';
+                this.init();
+            }
+
+            init() {
+                this.renderTasks();
+                this.updateStats();
+                this.setupEventListeners();
+                this.setTodayDate();
+            }
+
+            setTodayDate() {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('taskDate').value = today;
+                document.getElementById('taskDate').min   = today;
+            }
+
+            loadTasks() {
+                try {
+                    const stored = localStorage.getItem('agendaTasks');
+                    return stored ? JSON.parse(stored) : [];
+                } catch { return []; }
+            }
+
+            saveTasks() {
+                try { localStorage.setItem('agendaTasks', JSON.stringify(this.tasks)); } catch {}
+            }
+
+            setupEventListeners() {
+                document.getElementById('taskForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addTask();
+                });
+
+                document.querySelectorAll('.btn-filter').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.currentFilter = btn.dataset.filter;
+                        this.renderTasks();
+                    });
+                });
+
+                document.querySelectorAll('.form-control').forEach(input => {
+                    let t;
+                    input.addEventListener('input', function () {
+                        this.classList.add('typing');
+                        clearTimeout(t);
+                        t = setTimeout(() => this.classList.remove('typing'), 900);
+                    });
+                });
+
+                /* Modal confirm action */
+                modalConfirm.addEventListener('click', () => {
+                    if (pendingDeleteId !== null) {
+                        this.tasks = this.tasks.filter(t => t.id !== pendingDeleteId);
+                        this.saveTasks();
+                        this.renderTasks();
+                        this.updateStats();
+                    }
+                    hideDeleteModal();
+                });
+            }
+
+            addTask() {
+                const title = document.getElementById('taskTitle').value.trim();
+                if (!title) return;
+
+                const task = {
+                    id:          Date.now(),
+                    title,
+                    description: document.getElementById('taskDescription').value.trim(),
+                    date:        document.getElementById('taskDate').value,
+                    priority:    document.getElementById('taskPriority').value,
+                    completed:   false,
+                    createdAt:   new Date().toISOString()
+                };
+
+                this.tasks.unshift(task);
+                this.saveTasks();
+                this.renderTasks();
+                this.updateStats();
+                document.getElementById('taskForm').reset();
+                this.setTodayDate();
+            }
+
+            toggleComplete(id) {
+                const task = this.tasks.find(t => t.id === id);
+                if (!task) return;
+                task.completed = !task.completed;
+                this.saveTasks();
+                this.renderTasks();
+                this.updateStats();
+            }
+
+            deleteTask(id) {
+                const task = this.tasks.find(t => t.id === id);
+                if (!task) return;
+                showDeleteModal(id, task.title);
+            }
+
+            editTask(id) {
+                const task = this.tasks.find(t => t.id === id);
+                if (!task) return;
+                showEditModal(task);
+            }
+
+            applyEdit(id, fields) {
+                const task = this.tasks.find(t => t.id === id);
+                if (!task) return;
+                task.title       = fields.title;
+                task.description = fields.description;
+                task.date        = fields.date;
+                task.priority    = fields.priority;
+                this.saveTasks();
+                this.renderTasks();
+                this.updateStats();
+            }
+
+            filterTasks() {
+                switch (this.currentFilter) {
+                    case 'pendientes':  return this.tasks.filter(t => !t.completed);
+                    case 'completadas': return this.tasks.filter(t =>  t.completed);
+                    case 'alta':        return this.tasks.filter(t => t.priority === 'alta' && !t.completed);
+                    default:            return this.tasks;
+                }
+            }
+
+            renderTasks() {
+                const container = document.getElementById('tasksList');
+                const list = this.filterTasks();
+
+                if (!list.length) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fad fa-clipboard-list"></i>
+                            <p>No hay tareas para mostrar</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = list.map((task, i) => `
+                    <div class="task-item ${task.completed ? 'completed' : ''}"
+                         style="animation-delay:${i * 0.08}s">
+                        <div class="task-header">
+                            <div class="task-title">${this.esc(task.title)}</div>
+                            <span class="task-priority priority-${task.priority}">${task.priority}</span>
+                        </div>
+                        ${task.description ? `<div class="task-description">${this.esc(task.description)}</div>` : ''}
+                        <div class="task-meta">
+                            <span><i class="fad fa-calendar"></i>${this.formatDate(task.date)}</span>
+                            <span><i class="fad fa-clock"></i>${this.getRelativeTime(task.date)}</span>
+                        </div>
+                        <div class="task-actions">
+                            <button class="btn-action btn-complete"
+                                    onclick="taskManager.toggleComplete(${task.id})">
+                                <i class="fad ${task.completed ? 'fa-undo' : 'fa-check'}"></i>
+                                ${task.completed ? 'Deshacer' : 'Completar'}
+                            </button>
+                            <button class="btn-action btn-edit"
+                                    onclick="taskManager.editTask(${task.id})">
+                                <i class="fad fa-pen-to-square"></i> Editar
+                            </button>
+                            <button class="btn-action btn-delete"
+                                    onclick="taskManager.deleteTask(${task.id})">
+                                <i class="fad fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>`).join('');
+            }
+
+            updateStats() {
+                document.getElementById('totalTasks').textContent     = this.tasks.length;
+                document.getElementById('pendingTasks').textContent   = this.tasks.filter(t => !t.completed).length;
+                document.getElementById('completedTasks').textContent = this.tasks.filter(t =>  t.completed).length;
+            }
+
+            esc(str) {
+                return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            }
+
+            formatDate(d) {
+                return new Date(d).toLocaleDateString('es-ES', { year:'numeric', month:'long', day:'numeric' });
+            }
+
+            getRelativeTime(d) {
+                const diff = Math.ceil((new Date(d) - new Date()) / 86400000);
+                if (diff < 0)  return 'Vencida';
+                if (diff === 0) return 'Hoy';
+                if (diff === 1) return 'Mañana';
+                if (diff <= 7)  return `En ${diff} días`;
+                return `En ${Math.ceil(diff / 7)} semanas`;
+            }
+        }
+
+        const taskManager = new TaskManager();
+    </script>
+</body>
+</html>
