@@ -145,7 +145,8 @@ for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
 
     for (let i = 0; i < pages.length; i++) {
-      if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
+      const linkText = (this.querySelector("span") || this).innerText.toLowerCase();
+      if (linkText === pages[i].dataset.page) {
         pages[i].classList.add("active");
         navigationLinks[i].classList.add("active");
         window.scrollTo(0, 0);
@@ -160,8 +161,16 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
 window.addEventListener("load", function () {
   const preloader = document.getElementById("preloader");
+
   setTimeout(() => {
+    // Inicia el fade-out del preloader
     preloader.classList.add("fade-out");
-    setTimeout(() => preloader.remove(), 500); // Elimina del DOM
-  }, 2000); // 2 segundos
+
+    // Cuando termina el fade (500ms), activa las animaciones de entrada
+    setTimeout(() => {
+      preloader.remove();
+      document.body.classList.add("page-loaded");
+    }, 500);
+
+  }, 2000); // 2 segundos de preloader
 });

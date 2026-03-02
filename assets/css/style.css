@@ -500,18 +500,38 @@ main {
 .navbar-link {
   color: var(--light-gray);
   font-size: var(--fs-8);
-  padding: 20px 10px;
+  padding: 10px 6px;
   font-weight: 500;
   transition: color 0.3s ease, transform 0.3s ease;
   background: transparent;
   border: none;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.navbar-link i {
+  font-size: 18px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.navbar-link span {
+  font-size: 10px;
+  letter-spacing: 0.3px;
 }
 
 .navbar-link:hover,
 .navbar-link:focus {
   color: var(--green-lime);
   transform: translateY(-2px);
+}
+
+.navbar-link:hover i,
+.navbar-link:focus i {
+  transform: translateY(-3px) scale(1.15);
 }
 
 .navbar-link.active {
@@ -659,24 +679,37 @@ main {
  * #testimonials-modal
  */
 
+/* Overlay: cubre toda la pantalla con blur */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
+
+/* Modal container: fixed, centrado, por encima del overlay */
 .modal-container {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    z-index: 20;
+    padding: 20px;
+    z-index: 101;
     pointer-events: none;
     visibility: hidden;
-}
-
-.modal-container::-webkit-scrollbar {
-    display: none;
 }
 
 .modal-container.active {
@@ -684,51 +717,33 @@ main {
     visibility: visible;
 }
 
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    z-index: 1;
-    transition: var(--transition-1);
-}
-
-.overlay.active {
-    opacity: 0.8;
-    visibility: visible;
-    pointer-events: all;
-}
-
+/* El modal en sí */
 .testimonials-modal {
-    background: rgba(30, 30, 30, 0.6); /* fondo translúcido */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* borde sutil */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    /* backdrop-filter: blur(20px); */
-    /* -webkit-backdrop-filter: blur(20px); */
+    background: var(--eerie-black-2);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8);
     position: relative;
-    padding: 15px;
-    margin: 15px 12px;
+    padding: 24px;
     border-radius: 20px;
-    transform: scale(1.2);
+    width: 100%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    transform: scale(1.06) translateY(10px);
     opacity: 0;
-    transition: var(--transition-1);
-    z-index: 2;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
 }
 
 .modal-container.active .testimonials-modal {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
     opacity: 1;
 }
 
+/* Botón cerrar */
 .modal-close-btn {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 14px;
+    right: 14px;
     background: var(--onyx);
     border-radius: 8px;
     width: 32px;
@@ -738,32 +753,58 @@ main {
     align-items: center;
     color: var(--white-2);
     font-size: 18px;
-    opacity: 0.7;
+    opacity: 0.8;
+    cursor: pointer;
+    transition: opacity 0.2s ease, background 0.2s ease;
+    z-index: 1;
 }
 
 .modal-close-btn:hover,
 .modal-close-btn:focus {
     opacity: 1;
+    background: var(--jet);
 }
 
 .modal-close-btn ion-icon {
     --ionicon-stroke-width: 50px;
 }
 
-.modal-avatar-box {
-    background: var(--bg-gradient-onyx);
-    width: max-content;
-    border-radius: 14px;
-    margin-bottom: 15px;
-    box-shadow: var(--shadow-2);
+/* Fila: avatar + icono cita */
+.modal-img-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-right: 44px;
 }
 
-.modal-img-wrapper>img {
-    display: none;
+.modal-quote-icon {
+    font-size: 26px;
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
+.modal-avatar-box {
+    background: var(--bg-gradient-onyx);
+    border-radius: 14px;
+    box-shadow: var(--shadow-2);
+    flex-shrink: 0;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.modal-avatar-box img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    display: block;
+    border-radius: 14px;
 }
 
 .modal-title {
     margin-bottom: 4px;
+    font-size: var(--fs-4);
+    color: var(--white-2);
 }
 
 .modal-content time {
@@ -771,6 +812,7 @@ main {
     color: var(--light-gray-70);
     font-weight: var(--fw-300);
     margin-bottom: 10px;
+    display: block;
 }
 
 .modal-content p {
@@ -1504,35 +1546,7 @@ textarea.form-input::-webkit-resizer {
         line-clamp: 2;
         -webkit-line-clamp: 2;
     }
-    /* testimonials modal */
-    .modal-container {
-        padding: 20px;
-    }
-    .testimonials-modal {
-        display: flex;
-        justify-content: flex-start;
-        align-items: stretch;
-        gap: 25px;
-        padding: 30px;
-        border-radius: 20px;
-    }
-    .modal-img-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .modal-avatar-box {
-        border-radius: 18px;
-        margin-bottom: 0;
-    }
-    .modal-avatar-box img {
-        width: 65px;
-    }
-    .modal-img-wrapper>img {
-        display: block;
-        flex-grow: 1;
-        width: 35px;
-    }
+    /* testimonials modal - sin overrides necesarios, el modal ya es responsive */
     /* clients */
     .clients-list {
         gap: 50px;
@@ -1632,11 +1646,7 @@ textarea.form-input::-webkit-resizer {
    */
     /* testimonials modal */
     .testimonials-modal {
-        gap: 35px;
-        max-width: 680px;
-    }
-    .modal-avatar-box img {
-        width: 80px;
+        max-width: 460px;
     }
     /**
    * PORTFOLIO
@@ -1907,20 +1917,38 @@ textarea.form-input::-webkit-resizer {
   margin-bottom: 20px;
 }
 
-.discord-widget-container {
+.discord-embed-card {
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.discord-embed-card a {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  line-height: 0;
 }
 
 .discord-embed-image {
-  width: 100%;
-  max-width: 100%;
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .discord-embed-image:hover {
-  transform: scale(1.01);
+  transform: scale(1.01) translateY(-3px);
+  box-shadow: 0 20px 50px rgba(14, 144, 225, 0.2);
+}
+
+article.actividad {
+  overflow-x: hidden;
 }
 
 /* Responsive */
@@ -1962,6 +1990,9 @@ textarea.form-input::-webkit-resizer {
   }
 }
 
+/* =============================================
+   PRELOADER - Original restaurado
+   ============================================= */
 #preloader {
   position: fixed;
   top: 0;
@@ -1986,9 +2017,7 @@ textarea.form-input::-webkit-resizer {
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 #preloader.fade-out {
@@ -1996,4 +2025,240 @@ textarea.form-input::-webkit-resizer {
   pointer-events: none;
 }
 
+/* =============================================
+   ANIMACIONES DE ENTRADA
+   Se activan con .page-loaded en <body> (via JS)
+   después de que el preloader desaparece
+   ============================================= */
 
+/* Keyframes */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes growBar {
+  from { width: 0 !important; }
+}
+
+/* Ocultar elementos antes de que cargue (sin .page-loaded) */
+body:not(.page-loaded) .sidebar,
+body:not(.page-loaded) .avatar-box,
+body:not(.page-loaded) .info-content,
+body:not(.page-loaded) article.active,
+body:not(.page-loaded) article.active header,
+body:not(.page-loaded) .about-text,
+body:not(.page-loaded) .service-item,
+body:not(.page-loaded) .contact-item,
+body:not(.page-loaded) .social-item,
+body:not(.page-loaded) .timeline-item,
+body:not(.page-loaded) .skill-item,
+body:not(.page-loaded) .skill-progress-fill,
+body:not(.page-loaded) .project-item.active,
+body:not(.page-loaded) .mapbox,
+body:not(.page-loaded) .contact-form,
+body:not(.page-loaded) .discord-embed-card {
+  opacity: 0;
+}
+
+/* Navbar oculta fuera de pantalla antes de la animación */
+body:not(.page-loaded) .navbar {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+/* Navbar-items ocultos antes de la animación */
+body:not(.page-loaded) .navbar-item {
+  opacity: 0;
+}
+
+/* === SIDEBAR === */
+.page-loaded .sidebar {
+  animation: slideInLeft 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0s both;
+}
+
+.page-loaded .avatar-box {
+  animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+
+.page-loaded .info-content {
+  animation: slideInUp 0.5s ease 0.25s both;
+}
+
+/* Items de contacto en sidebar escalonados */
+.page-loaded .contact-item:nth-child(1) { animation: slideInLeft 0.4s ease 0.3s both; }
+.page-loaded .contact-item:nth-child(2) { animation: slideInLeft 0.4s ease 0.4s both; }
+.page-loaded .contact-item:nth-child(3) { animation: slideInLeft 0.4s ease 0.5s both; }
+.page-loaded .contact-item:nth-child(4) { animation: slideInLeft 0.4s ease 0.6s both; }
+
+/* Redes sociales */
+.page-loaded .social-item:nth-child(1) { animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.65s both; }
+.page-loaded .social-item:nth-child(2) { animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.75s both; }
+.page-loaded .social-item:nth-child(3) { animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.85s both; }
+
+/* === NAVBAR === */
+@keyframes navbarSlideUp {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes navItemPop {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-loaded .navbar {
+  animation: navbarSlideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+
+.page-loaded .navbar-item:nth-child(1) { animation: navItemPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s both; }
+.page-loaded .navbar-item:nth-child(2) { animation: navItemPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both; }
+.page-loaded .navbar-item:nth-child(3) { animation: navItemPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s both; }
+.page-loaded .navbar-item:nth-child(4) { animation: navItemPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s both; }
+.page-loaded .navbar-item:nth-child(5) { animation: navItemPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.65s both; }
+
+/* === ARTÍCULO ACTIVO === */
+.page-loaded article.active {
+  animation: slideInRight 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+.page-loaded article.active header {
+  animation: slideInUp 0.45s ease 0.3s both;
+}
+
+.page-loaded .about-text {
+  animation: slideInUp 0.45s ease 0.4s both;
+}
+
+/* Servicios escalonados */
+.page-loaded .service-item:nth-child(1) { animation: slideInUp 0.45s ease 0.35s both; }
+.page-loaded .service-item:nth-child(2) { animation: slideInUp 0.45s ease 0.47s both; }
+.page-loaded .service-item:nth-child(3) { animation: slideInUp 0.45s ease 0.59s both; }
+.page-loaded .service-item:nth-child(4) { animation: slideInUp 0.45s ease 0.71s both; }
+
+/* Timeline */
+.page-loaded .timeline-item:nth-child(1) { animation: slideInLeft 0.45s ease 0.15s both; }
+.page-loaded .timeline-item:nth-child(2) { animation: slideInLeft 0.45s ease 0.28s both; }
+.page-loaded .timeline-item:nth-child(3) { animation: slideInLeft 0.45s ease 0.41s both; }
+.page-loaded .timeline-item:nth-child(4) { animation: slideInLeft 0.45s ease 0.54s both; }
+.page-loaded .timeline-item:nth-child(5) { animation: slideInLeft 0.45s ease 0.67s both; }
+
+/* Skills */
+.page-loaded .skill-item:nth-child(1) { animation: slideInUp 0.45s ease 0.1s both; }
+.page-loaded .skill-item:nth-child(2) { animation: slideInUp 0.45s ease 0.2s both; }
+.page-loaded .skill-item:nth-child(3) { animation: slideInUp 0.45s ease 0.3s both; }
+.page-loaded .skill-item:nth-child(4) { animation: slideInUp 0.45s ease 0.4s both; }
+.page-loaded .skill-item:nth-child(5) { animation: slideInUp 0.45s ease 0.5s both; }
+.page-loaded .skill-item:nth-child(6) { animation: slideInUp 0.45s ease 0.6s both; }
+
+.page-loaded .skill-progress-fill {
+  animation: growBar 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
+}
+
+/* Portfolio */
+.page-loaded .project-item.active:nth-child(1)  { animation: scaleIn 0.4s ease 0.1s both; }
+.page-loaded .project-item.active:nth-child(2)  { animation: scaleIn 0.4s ease 0.18s both; }
+.page-loaded .project-item.active:nth-child(3)  { animation: scaleIn 0.4s ease 0.26s both; }
+.page-loaded .project-item.active:nth-child(4)  { animation: scaleIn 0.4s ease 0.34s both; }
+.page-loaded .project-item.active:nth-child(5)  { animation: scaleIn 0.4s ease 0.42s both; }
+.page-loaded .project-item.active:nth-child(6)  { animation: scaleIn 0.4s ease 0.50s both; }
+
+/* Contacto */
+.page-loaded .mapbox {
+  animation: slideInUp 0.5s ease 0.1s both;
+}
+
+.page-loaded .contact-form {
+  animation: slideInUp 0.5s ease 0.25s both;
+}
+
+/* Discord */
+.page-loaded .discord-embed-card {
+  animation: scaleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+.form-input {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.form-input:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(14, 144, 225, 0.15);
+}
+
+/* Hover mejorado en service items */
+.service-item {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.service-item:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(14, 144, 225, 0.12);
+}
+
+/* Hover en project items mejorado */
+.project-item a {
+  transition: transform 0.3s ease;
+}
+
+.project-item a:hover {
+  transform: translateY(-4px);
+}
+
+/* Social links con bounce */
+.social-link {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+}
+
+.social-link:hover {
+  transform: translateY(-4px) scale(1.15);
+}
+
+/* Navbar link con efecto mejorado */
+.navbar-link {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.navbar-link::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--green-lime);
+  border-radius: 2px;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.navbar-link:hover::after,
+.navbar-link.active::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Discord card animación */
+.discord-embed-card {
+  animation: scaleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
