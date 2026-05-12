@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informática para Todos — Curso Básico</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --border-gradient-onyx: linear-gradient(to bottom right, hsl(0,0%,25%) 0%, hsla(0,0%,25%,0) 50%);
+  --text-gradient-blue: linear-gradient(to right, hsl(203,88%,47%), hsl(203,84%,36%));
+  --jet: hsl(0,0%,22%);
+  --eerie-black-1: hsl(240,2%,13%);
+  --smoky-black: hsl(0,0%,7%);
+  --white-2: hsl(0,0%,98%);
+  --green-lime: hsl(203,88%,47%);
+  --green-bold: hsl(203,84%,36%);
+  --light-gray: hsl(0,0%,84%);
+  --light-gray-70: hsla(0,0%,84%,.7);
+  --ff-poppins: 'Poppins', sans-serif;
+  --fs-1:24px;--fs-2:18px;--fs-3:17px;--fs-4:16px;
+  --fs-5:15px;--fs-6:14px;--fs-7:13px;--fs-8:11px;
+  --fw-500:500;--fw-600:600;
+  --shadow-1: -4px 8px 24px hsla(0,0%,0%,.25);
+  --transition-1: .25s ease;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+a{text-decoration:none;}li{list-style:none;}
+html{font-family:var(--ff-poppins);scroll-behavior:smooth;}
+::selection{background:var(--green-lime);color:var(--smoky-black);}
+body{background:var(--smoky-black);color:var(--light-gray);font-size:var(--fs-5);line-height:1.7;min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 10% 10%,hsla(203,88%,30%,.12) 0%,transparent 50%),radial-gradient(ellipse at 90% 90%,hsla(240,50%,20%,.13) 0%,transparent 50%);z-index:-1;pointer-events:none;}
+
+#preloader{position:fixed;inset:0;background:var(--smoky-black);display:flex;justify-content:center;align-items:center;z-index:9999;transition:opacity .5s ease;}
+.loader{border:5px solid rgba(255,255,255,.1);border-top:5px solid var(--green-lime);border-radius:50%;width:54px;height:54px;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#preloader.fade-out{opacity:0;pointer-events:none;}
+
+.page-wrapper{max-width:1160px;margin:0 auto;padding:20px 16px 70px;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.main-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;animation:slideUp .5s ease .1s both;}
+.tab-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(30,30,30,.65);border:1px solid rgba(255,255,255,.08);border-radius:14px;color:var(--light-gray-70);font-family:var(--ff-poppins);font-size:var(--fs-6);font-weight:var(--fw-500);padding:11px 22px;cursor:pointer;transition:all var(--transition-1);backdrop-filter:blur(20px);}
+.tab-btn:hover{color:var(--light-gray);border-color:rgba(14,144,225,.35);}
+.tab-btn.active{background:rgba(14,144,225,.18);border-color:var(--green-lime);color:var(--green-lime);box-shadow:0 4px 20px hsla(203,88%,47%,.2);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;animation:fadeIn .4s ease both;}
+
+.course-header{background:rgba(30,30,30,.65);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:40px 36px;margin-bottom:20px;backdrop-filter:blur(20px);box-shadow:0 10px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:26px;animation:slideDown .7s cubic-bezier(.22,1,.36,1) both;}
+.header-icon{flex-shrink:0;width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,var(--green-lime),var(--green-bold));display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;box-shadow:0 8px 24px hsla(203,88%,47%,.35);}
+.course-header h1{font-size:clamp(1.45rem,3.5vw,2.1rem);font-weight:var(--fw-600);color:var(--white-2);line-height:1.2;margin-bottom:6px;}
+.course-header h1 span{background:var(--text-gradient-blue);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.course-header p{color:var(--light-gray-70);font-size:var(--fs-6);max-width:580px;}
+.meta-pills{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px;}
+.pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:3px 12px;font-size:var(--fs-8);color:var(--light-gray-70);font-weight:var(--fw-500);letter-spacing:.04em;text-transform:uppercase;}
+.pill i{color:var(--green-lime);font-size:7px;}
+
+.topic-nav{background:rgba(30,30,30,.65);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 16px;margin-bottom:22px;backdrop-filter:blur(20px);display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.topic-nav .nav-label{font-size:var(--fs-8);color:var(--light-gray-70);text-transform:uppercase;letter-spacing:.08em;margin-right:4px;}
+.nav-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(255,255,255,.08);border-radius:10px;color:var(--light-gray-70);font-family:var(--ff-poppins);font-size:var(--fs-7);font-weight:var(--fw-500);padding:6px 13px;cursor:pointer;transition:all var(--transition-1);}
+.nav-btn:hover,.nav-btn.scroll-active{background:rgba(14,144,225,.13);border-color:var(--green-lime);color:var(--green-lime);}
+
+.sections-grid{display:flex;flex-direction:column;gap:18px;}
+.topic-section{background:rgba(30,30,30,.65);border:1px solid rgba(255,255,255,.07);border-radius:20px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.4);backdrop-filter:blur(20px);opacity:0;transform:translateY(22px);transition:opacity .5s ease,transform .5s ease;}
+.topic-section.visible{opacity:1;transform:translateY(0);}
+.section-head{display:flex;align-items:center;gap:15px;padding:24px 28px 20px;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;user-select:none;}
+.section-head:hover .section-title{color:var(--green-lime);}
+.section-num{flex-shrink:0;width:34px;height:34px;border-radius:10px;background:rgba(14,144,225,.1);border:1px solid rgba(14,144,225,.28);display:flex;align-items:center;justify-content:center;font-size:var(--fs-7);font-weight:var(--fw-600);color:var(--green-lime);}
+.section-icon-box{flex-shrink:0;width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
+.section-title{font-size:var(--fs-2);font-weight:var(--fw-600);color:var(--white-2);transition:color var(--transition-1);}
+.section-subtitle{font-size:var(--fs-7);color:var(--light-gray-70);margin-top:2px;}
+.toggle-arrow{margin-left:auto;color:var(--light-gray-70);font-size:var(--fs-5);transition:transform var(--transition-1);}
+.topic-section.open .toggle-arrow{transform:rotate(180deg);}
+.section-body{padding:0 28px;max-height:0;overflow:hidden;transition:max-height .45s ease,padding .3s ease;}
+.topic-section.open .section-body{max-height:5000px;padding:22px 28px 28px;}
+
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:13px;margin-bottom:18px;}
+.step-card{position:relative;background:rgba(40,40,40,.6);border:1px solid rgba(255,255,255,.06);border-radius:15px;padding:17px;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease,border-color .3s ease;}
+.step-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px rgba(0,0,0,.5);border-color:rgba(14,144,225,.2);}
+.step-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.step-badge{position:relative;width:30px;height:30px;border-radius:8px;background:var(--border-gradient-onyx);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--green-lime);box-shadow:var(--shadow-1);flex-shrink:0;z-index:1;}
+.step-badge::before{content:"";position:absolute;inset:1px;background:var(--eerie-black-1);border-radius:inherit;z-index:-1;}
+.step-name{font-size:var(--fs-6);font-weight:var(--fw-600);color:var(--white-2);}
+.step-desc{font-size:var(--fs-7);color:var(--light-gray-70);line-height:1.6;}
+
+.tips-list{display:flex;flex-direction:column;gap:8px;margin-bottom:4px;}
+.tip-item{display:flex;align-items:flex-start;gap:10px;background:rgba(40,40,40,.5);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:12px 14px;transition:background var(--transition-1),border-color var(--transition-1);}
+.tip-item:hover{background:rgba(14,144,225,.07);border-color:rgba(14,144,225,.2);}
+.tip-icon{flex-shrink:0;width:26px;height:26px;border-radius:7px;background:rgba(14,144,225,.1);display:flex;align-items:center;justify-content:center;color:var(--green-lime);font-size:11px;margin-top:2px;}
+.tip-text{font-size:var(--fs-7);color:var(--light-gray);line-height:1.6;}
+.tip-text strong{color:var(--white-2);font-weight:var(--fw-500);}
+.tip-text code{background:rgba(255,255,255,.08);padding:1px 7px;border-radius:5px;font-family:monospace;font-size:12px;color:var(--green-lime);}
+
+.info-box{display:flex;align-items:flex-start;gap:12px;border-radius:13px;padding:14px 17px;margin-top:14px;font-size:var(--fs-7);line-height:1.65;}
+.info-box i{font-size:1rem;margin-top:2px;flex-shrink:0;}
+.info-box.blue{background:rgba(14,144,225,.1);border:1px solid rgba(14,144,225,.25);color:hsl(203,70%,82%);}
+.info-box.yellow{background:rgba(255,193,69,.08);border:1px solid rgba(255,193,69,.25);color:hsl(42,80%,80%);}
+.info-box.red{background:rgba(220,80,80,.09);border:1px solid rgba(220,80,80,.25);color:hsl(0,65%,82%);}
+.info-box.green{background:rgba(14,180,100,.09);border:1px solid rgba(14,180,100,.25);color:hsl(150,60%,76%);}
+.sep{width:100%;height:1px;background:var(--jet);margin:16px 0;}
+.sub-heading{font-size:var(--fs-4);font-weight:var(--fw-600);color:var(--white-2);margin-bottom:13px;display:flex;align-items:center;gap:9px;}
+.sub-heading i{color:var(--green-lime);font-size:var(--fs-5);}
+
+.chrome-path{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap;background:rgba(14,144,225,.08);border:1px solid rgba(14,144,225,.2);border-radius:10px;padding:7px 14px;margin-bottom:14px;font-size:var(--fs-7);color:hsl(203,70%,82%);}
+.chrome-path .arrow{color:var(--light-gray-70);margin:0 2px;}
+.chrome-path .step-lbl{background:rgba(14,144,225,.15);border-radius:6px;padding:1px 8px;font-weight:var(--fw-500);color:var(--green-lime);}
+
+.shortcuts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-bottom:6px;}
+.shortcut-row{display:flex;align-items:center;gap:12px;background:rgba(40,40,40,.5);border:1px solid rgba(255,255,255,.05);border-radius:11px;padding:10px 14px;transition:background var(--transition-1);}
+.shortcut-row:hover{background:rgba(14,144,225,.07);}
+.kbd-group{display:flex;align-items:center;gap:4px;flex-shrink:0;min-width:110px;}
+kbd{display:inline-flex;align-items:center;justify-content:center;background:rgba(14,144,225,.12);border:1px solid rgba(14,144,225,.3);border-radius:6px;padding:3px 9px;font-family:monospace;font-size:12px;font-weight:700;color:var(--green-lime);box-shadow:0 2px 0 rgba(14,144,225,.25);}
+kbd.plus{background:none;border:none;color:var(--light-gray-70);font-size:14px;padding:0 1px;}
+.shortcut-desc{font-size:var(--fs-7);color:var(--light-gray);}
+
+.office-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:13px;}
+.office-card{background:rgba(40,40,40,.6);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:22px 18px;text-align:center;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease;}
+.office-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 20px 40px rgba(0,0,0,.5);}
+.office-card .app-icon{font-size:2.2rem;margin-bottom:10px;display:block;}
+.office-card h4{font-size:var(--fs-5);font-weight:var(--fw-600);color:var(--white-2);margin-bottom:5px;}
+.office-card p{font-size:var(--fs-8);color:var(--light-gray-70);line-height:1.5;}
+.app-tag{display:inline-block;margin-top:9px;padding:3px 10px;border-radius:100px;font-size:var(--fs-8);font-weight:var(--fw-500);}
+
+.progress-row{display:flex;align-items:center;gap:11px;margin-bottom:8px;}
+.progress-label{min-width:165px;font-size:var(--fs-7);color:var(--light-gray);}
+.progress-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(to right,var(--green-lime),var(--green-bold));}
+
+.apuntes-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.apuntes-card{background:rgba(30,30,30,.65);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:24px;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,.35);}
+.apuntes-card.full{grid-column:1/-1;}
+.apuntes-card h3{font-size:var(--fs-3);font-weight:var(--fw-600);color:var(--white-2);margin-bottom:14px;display:flex;align-items:center;gap:9px;}
+.apuntes-card h3 i{color:var(--green-lime);}
+
+.glosario-list{display:flex;flex-direction:column;gap:8px;}
+.glosario-item{display:flex;align-items:flex-start;gap:12px;background:rgba(40,40,40,.5);border:1px solid rgba(255,255,255,.05);border-radius:11px;padding:11px 14px;}
+.glosario-term{min-width:110px;font-size:var(--fs-7);font-weight:var(--fw-600);color:var(--green-lime);flex-shrink:0;}
+.glosario-def{font-size:var(--fs-7);color:var(--light-gray-70);line-height:1.5;}
+
+.notas-area{width:100%;min-height:200px;background:rgba(40,40,40,.5);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:14px 16px;color:var(--light-gray);font-family:var(--ff-poppins);font-size:var(--fs-7);line-height:1.7;resize:vertical;transition:border-color .25s,box-shadow .25s;}
+.notas-area:focus{outline:none;border-color:rgba(14,144,225,.5);box-shadow:0 0 0 3px hsla(203,88%,47%,.12);}
+.notas-area::placeholder{color:var(--light-gray-70);opacity:.6;}
+.notas-toolbar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.notas-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(40,40,40,.6);border:1px solid rgba(255,255,255,.08);border-radius:9px;color:var(--light-gray-70);font-family:var(--ff-poppins);font-size:var(--fs-7);padding:6px 13px;cursor:pointer;transition:all var(--transition-1);}
+.notas-btn:hover{background:rgba(14,144,225,.12);border-color:rgba(14,144,225,.3);color:var(--green-lime);}
+.notas-saved{font-size:var(--fs-8);color:hsl(150,60%,65%);margin-top:6px;display:none;align-items:center;gap:5px;}
+.notas-saved.show{display:flex;}
+
+.resumen-section{margin-bottom:18px;}
+.resumen-section h4{font-size:var(--fs-5);font-weight:var(--fw-600);color:var(--white-2);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:8px;}
+.resumen-section h4 i{color:var(--green-lime);}
+.resumen-list{display:flex;flex-direction:column;gap:6px;}
+.resumen-list li{display:flex;align-items:baseline;gap:8px;font-size:var(--fs-7);color:var(--light-gray-70);padding:5px 0;border-bottom:1px dashed rgba(255,255,255,.04);}
+.resumen-list li::before{content:"›";color:var(--green-lime);font-size:14px;flex-shrink:0;}
+.print-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(14,144,225,.15);border:1px solid rgba(14,144,225,.35);border-radius:12px;color:var(--green-lime);font-family:var(--ff-poppins);font-size:var(--fs-6);font-weight:var(--fw-500);padding:11px 24px;cursor:pointer;margin-top:6px;transition:all var(--transition-1);}
+.print-btn:hover{background:rgba(14,144,225,.25);box-shadow:0 6px 20px hsla(203,88%,47%,.25);}
+
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:center;gap:12px;background:rgba(40,40,40,.5);border:1px solid rgba(255,255,255,.05);border-radius:11px;padding:10px 14px;cursor:pointer;transition:all var(--transition-1);user-select:none;}
+.check-item:hover{border-color:rgba(14,144,225,.2);background:rgba(14,144,225,.06);}
+.check-item.done{opacity:.55;}
+.check-item.done .check-label{text-decoration:line-through;color:var(--light-gray-70);}
+.check-box{width:20px;height:20px;border-radius:6px;border:2px solid rgba(14,144,225,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s ease;}
+.check-item.done .check-box{background:var(--green-lime);border-color:var(--green-lime);}
+.check-box i{font-size:10px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-label{font-size:var(--fs-7);color:var(--light-gray);}
+
+.course-footer{background:rgba(30,30,30,.65);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:26px 36px;margin-top:22px;text-align:center;backdrop-filter:blur(20px);}
+.course-footer p{font-size:var(--fs-7);color:var(--light-gray-70);}
+.course-footer strong{color:var(--green-lime);}
+.course-footer a{color:var(--green-lime);}
+
+/* TOOL CARDS (validadores) */
+.tool-card{background:rgba(40,40,40,.6);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px;margin-bottom:4px;}
+.pwd-input-wrap{position:relative;display:flex;gap:8px;margin-bottom:12px;}
+.tool-input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 16px;color:var(--light-gray);font-family:var(--ff-poppins);font-size:var(--fs-6);transition:border-color .25s,box-shadow .25s;}
+.tool-input:focus{outline:none;border-color:rgba(14,144,225,.5);box-shadow:0 0 0 3px hsla(203,88%,47%,.1);}
+.tool-input::placeholder{color:var(--light-gray-70);opacity:.6;}
+.tool-eye-btn,.tool-check-btn{flex-shrink:0;background:rgba(14,144,225,.12);border:1px solid rgba(14,144,225,.3);border-radius:10px;color:var(--green-lime);font-family:var(--ff-poppins);font-size:var(--fs-7);padding:0 16px;cursor:pointer;transition:all var(--transition-1);display:flex;align-items:center;gap:6px;}
+.tool-eye-btn:hover,.tool-check-btn:hover{background:rgba(14,144,225,.25);box-shadow:0 4px 14px hsla(203,88%,47%,.2);}
+
+.strength-bar-wrap{width:100%;height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;margin-bottom:8px;}
+.strength-bar-fill{height:100%;width:0%;border-radius:4px;transition:width .5s ease,background .4s ease;}
+.strength-label{font-size:var(--fs-7);font-weight:var(--fw-500);margin-bottom:14px;color:var(--light-gray-70);}
+
+.pwd-criteria{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.crit-item{display:flex;align-items:center;gap:8px;font-size:var(--fs-7);color:var(--light-gray-70);background:rgba(255,255,255,.04);border-radius:9px;padding:8px 12px;transition:all .3s ease;}
+.crit-item i{font-size:12px;flex-shrink:0;}
+.crit-item.pass{color:hsl(150,60%,70%);background:rgba(14,180,100,.08);border:1px solid rgba(14,180,100,.2);}
+.crit-item.pass i{color:hsl(150,60%,60%);}
+.crit-item.fail i{color:hsl(0,65%,65%);}
+
+/* URL RESULT */
+.url-result{border-radius:13px;padding:16px 18px;margin-top:4px;font-size:var(--fs-7);line-height:1.7;}
+.url-result.safe{background:rgba(14,180,100,.1);border:1px solid rgba(14,180,100,.3);color:hsl(150,60%,76%);}
+.url-result.warning{background:rgba(255,193,69,.08);border:1px solid rgba(255,193,69,.3);color:hsl(42,80%,80%);}
+.url-result.danger{background:rgba(220,80,80,.1);border:1px solid rgba(220,80,80,.3);color:hsl(0,65%,82%);}
+.url-result-title{font-size:var(--fs-5);font-weight:var(--fw-600);margin-bottom:10px;display:flex;align-items:center;gap:9px;}
+.url-checks{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
+.url-check-row{display:flex;align-items:center;gap:8px;font-size:var(--fs-7);}
+.url-check-row i{font-size:12px;flex-shrink:0;}
+
+/* POPUP BIENVENIDA */
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);animation:fadeIn .4s ease both;}
+.popup-box{background:hsl(240,2%,13%);border:1px solid rgba(14,144,225,.3);border-radius:22px;padding:40px 36px;max-width:480px;width:100%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.6);animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes popIn{from{opacity:0;transform:scale(.85);}to{opacity:1;transform:scale(1);}}
+.popup-icon{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--green-lime),var(--green-bold));display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;margin:0 auto 20px;box-shadow:0 8px 24px hsla(203,88%,47%,.35);}
+.popup-box h2{font-size:var(--fs-1);font-weight:var(--fw-600);color:var(--white-2);margin-bottom:10px;}
+.popup-box h2 span{background:var(--text-gradient-blue);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.popup-box p{font-size:var(--fs-6);color:var(--light-gray-70);margin-bottom:24px;line-height:1.6;}
+.popup-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+.popup-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(14,144,225,.1);border:1px solid rgba(14,144,225,.25);border-radius:100px;padding:4px 13px;font-size:var(--fs-8);color:hsl(203,70%,82%);}
+.popup-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green-lime),var(--green-bold));border:none;border-radius:12px;color:#fff;font-family:var(--ff-poppins);font-size:var(--fs-5);font-weight:var(--fw-600);padding:14px 32px;cursor:pointer;transition:all var(--transition-1);box-shadow:0 6px 20px hsla(203,88%,47%,.35);}
+.popup-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px hsla(203,88%,47%,.45);}
+
+@media print{
+  body{background:#fff!important;color:#111!important;}
+  body::before,#preloader,.main-tabs,.topic-nav,.course-footer,.toggle-arrow,.notas-toolbar,.print-btn,.popup-overlay,.tool-card{display:none!important;}
+  .topic-section,.apuntes-card,.course-header{background:#fff!important;border:1px solid #ddd!important;box-shadow:none!important;backdrop-filter:none!important;}
+  .topic-section.open .section-body,.tab-panel{display:block!important;max-height:none!important;padding:16px!important;}
+  .section-title,.sub-heading{color:#111!important;}
+  .tip-text,.step-desc,.glosario-def{color:#333!important;}
+  kbd{background:#eee!important;border:1px solid #bbb!important;color:#333!important;}
+}
+@media(max-width:680px){
+  .course-header{flex-direction:column;text-align:center;padding:28px 20px;}
+  .steps-grid{grid-template-columns:1fr;}
+  .office-grid{grid-template-columns:1fr 1fr;}
+  .apuntes-grid{grid-template-columns:1fr;}
+  .shortcuts-grid{grid-template-columns:1fr;}
+  .progress-label{min-width:120px;font-size:11px;}
+  .pwd-criteria{grid-template-columns:1fr;}
+  .popup-box{padding:28px 20px;}
+}
+@media(max-width:400px){.office-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div id="preloader"><div class="loader"></div></div>
+
+<!-- POPUP BIENVENIDA -->
+<div class="popup-overlay" id="welcomePopup" style="display:none;">
+  <div class="popup-box">
+    <div class="popup-icon"><i class="fas fa-laptop-code"></i></div>
+    <h2>Bienvenido al curso de<br><span>Informatica para Todos</span></h2>
+    <p>Aprenderemos juntos desde cero: encender el ordenador, navegar por internet con Chrome, protegernos de fraudes y mucho mas.</p>
+    <div class="popup-pills">
+      <span class="popup-pill"><i class="fas fa-clock"></i>2 sesiones de 5h</span>
+      <span class="popup-pill"><i class="fab fa-chrome"></i>Google Chrome</span>
+      <span class="popup-pill"><i class="fas fa-shield-alt"></i>Seguridad</span>
+      <span class="popup-pill"><i class="fas fa-file-alt"></i>Pack Office</span>
+    </div>
+    <button class="popup-btn" onclick="closePopup()"><i class="fas fa-rocket"></i>Empezar el curso</button>
+  </div>
+</div>
+
+<div class="page-wrapper">
+
+<header class="course-header">
+  <div class="header-icon"><i class="fas fa-laptop-code"></i></div>
+  <div>
+    <h1>Informática para <span>Todos</span></h1>
+    <p>Curso básico de 2 sesiones · Todo lo que necesitas para empezar con confianza en el mundo digital.</p>
+    <div class="meta-pills">
+      <span class="pill"><i class="fas fa-circle"></i>2 Sesiones · 5h c/u</span>
+      <span class="pill"><i class="fas fa-circle"></i>Nivel 0</span>
+      <span class="pill"><i class="fab fa-chrome"></i>Google Chrome</span>
+      <span class="pill"><i class="fas fa-circle"></i>Alejandro Bautista</span>
+    </div>
+  </div>
+</header>
+
+<div class="main-tabs">
+  <button class="tab-btn active" onclick="switchTab('contenido',this)"><i class="fas fa-book-open"></i>Contenido del Curso</button>
+  <button class="tab-btn" onclick="switchTab('apuntes',this)"><i class="fas fa-pencil-alt"></i>Apuntes &amp; Resumen</button>
+</div>
+
+<!-- TAB CONTENIDO -->
+<div class="tab-panel active" id="tab-contenido">
+  <nav class="topic-nav">
+    <span class="nav-label">Ir a:</span>
+    <a class="nav-btn" href="#s1"><i class="fas fa-power-off"></i>El Ordenador</a>
+    <a class="nav-btn" href="#s2"><i class="fab fa-chrome"></i>Chrome</a>
+    <a class="nav-btn" href="#s3"><i class="fas fa-bell-slash"></i>Notificaciones</a>
+    <a class="nav-btn" href="#s4"><i class="fas fa-cookie-bite"></i>Cookies</a>
+    <a class="nav-btn" href="#s5"><i class="fas fa-file-alt"></i>Pack Office</a>
+    <a class="nav-btn" href="#s6"><i class="fas fa-shield-alt"></i>Seguridad</a>
+  </nav>
+  <div class="sections-grid">
+
+    <!-- 01 ORDENADOR -->
+    <section class="topic-section" id="s1">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-num">01</div>
+        <div class="section-icon-box" style="background:rgba(79,195,247,.12);color:#4fc3f7;"><i class="fas fa-desktop"></i></div>
+        <div><p class="section-title">El Ordenador: Encender, Apagar y Reiniciar</p><p class="section-subtitle">Los primeros pasos para manejar un equipo con seguridad</p></div>
+        <i class="fas fa-chevron-down toggle-arrow"></i>
+      </div>
+      <div class="section-body">
+        <p class="sub-heading"><i class="fas fa-power-off"></i>Encender el ordenador</p>
+        <div class="steps-grid">
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-plug"></i></div><span class="step-name">1. Conectar la corriente</span></div><p class="step-desc">Cable de alimentación bien enchufado a la regleta y al ordenador. En portátiles, conecta el cargador antes de encender.</p></div>
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-toggle-on"></i></div><span class="step-name">2. Botón de encendido ⏻</span></div><p class="step-desc">Una pulsación breve. En sobremesa está en la torre; en portátil, en la parte superior del teclado, normalmente arriba a la derecha.</p></div>
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-spinner"></i></div><span class="step-name">3. Esperar el arranque</span></div><p class="step-desc">Windows tarda entre 30 segundos y 2 minutos. Verás el logo aparecer. No pulses nada, solo espera con paciencia.</p></div>
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-user"></i></div><span class="step-name">4. Iniciar sesión</span></div><p class="step-desc">Escribe tu PIN o contraseña cuando aparezca la pantalla de usuario y pulsa Enter. Ya estás en el escritorio.</p></div>
+        </div>
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-redo-alt"></i>Reiniciar y apagar correctamente</p>
+        <div class="tips-list">
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-sync-alt"></i></div><p class="tip-text"><strong>Reiniciar:</strong> Inicio (logo Windows) → icono Encendido → <strong>"Reiniciar"</strong>. El sistema se apaga solo y vuelve a arrancar. Aplica actualizaciones y soluciona muchos fallos.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-power-off"></i></div><p class="tip-text"><strong>Apagar:</strong> Inicio → Encendido → <strong>"Apagar"</strong>. Cierre total del sistema. Úsalo al final del día.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-moon"></i></div><p class="tip-text"><strong>Suspender:</strong> Ahorra energía manteniendo todo listo para continuar en segundos. Para uso diario es cómodo; apagar total es mejor por las noches.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-exclamation-triangle"></i></div><p class="tip-text"><strong>¡Nunca desenchufes sin apagar!</strong> Apagar a la fuerza puede corromper archivos. Si el equipo se bloquea totalmente, mantén el botón 5 segundos. Solo como último recurso.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 CHROME -->
+    <section class="topic-section" id="s2">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-num">02</div>
+        <div class="section-icon-box" style="background:rgba(255,167,38,.12);color:#ffa726;"><i class="fab fa-chrome"></i></div>
+        <div><p class="section-title">Google Chrome: Tu Navegador Web</p><p class="section-subtitle">Cómo entrar a internet, navegar y usar Chrome desde cero</p></div>
+        <i class="fas fa-chevron-down toggle-arrow"></i>
+      </div>
+      <div class="section-body">
+        <div class="info-box blue" style="margin-top:0;margin-bottom:18px;"><i class="fas fa-info-circle"></i><span><strong>Google Chrome</strong> es el navegador web más usado del mundo. Nos sirve para visitar páginas de internet, buscar información, ver vídeos y hacer trámites online. Su icono es un círculo de colores.</span></div>
+        <p class="sub-heading"><i class="fas fa-play-circle"></i>Abrir Chrome por primera vez</p>
+        <div class="steps-grid">
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-desktop"></i></div><span class="step-name">Desde el escritorio</span></div><p class="step-desc">Busca el icono de Chrome en el escritorio y haz <strong>doble clic</strong>. Si no lo ves, búscalo en la barra de tareas de abajo.</p></div>
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-search"></i></div><span class="step-name">Desde el Inicio</span></div><p class="step-desc">Clic en el logo de Windows → escribe <strong>"Chrome"</strong> → pulsa Enter. Aparecerá en los resultados para abrirlo.</p></div>
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-map-marker-alt"></i></div><span class="step-name">La barra de dirección</span></div><p class="step-desc">La barra alargada en la parte superior. Haz clic, escribe una dirección (ej: <code>www.google.com</code>) y pulsa Enter.</p></div>
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-search"></i></div><span class="step-name">Buscar en Google</span></div><p class="step-desc">Si no sabes la dirección exacta, escribe lo que buscas directamente en la barra y Chrome te llevará a los resultados.</p></div>
+        </div>
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-th-large"></i>Las partes de Chrome</p>
+        <div class="tips-list">
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-arrow-left"></i></div><p class="tip-text"><strong>Botón Atrás ←</strong> (arriba izquierda): Vuelve a la página anterior que estabas viendo.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-redo"></i></div><p class="tip-text"><strong>Recargar ↻ o F5:</strong> Vuelve a cargar la página. Si algo no se ve bien o está desactualizado, pulsa aquí.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-th"></i></div><p class="tip-text"><strong>Pestañas (arriba del todo):</strong> Cada pestaña es una página diferente abierta a la vez. La X cierra esa pestaña.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-ellipsis-v"></i></div><p class="tip-text"><strong>Tres puntos ⋮ (arriba derecha):</strong> El menú principal de Chrome. Desde aquí accedes a configuración, historial, descargas, etc.</p></div>
+        </div>
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-keyboard"></i>Atajos de teclado esenciales en Chrome</p>
+        <div class="shortcuts-grid">
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>T</kbd></div><span class="shortcut-desc">Nueva pestaña</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>W</kbd></div><span class="shortcut-desc">Cerrar pestaña actual</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>N</kbd></div><span class="shortcut-desc">Nueva ventana de Chrome</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>Shift</kbd><kbd class="plus">+</kbd><kbd>N</kbd></div><span class="shortcut-desc">Modo incógnito</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>F5</kbd></div><span class="shortcut-desc">Recargar la página</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Alt</kbd><kbd class="plus">+</kbd><kbd>←</kbd></div><span class="shortcut-desc">Página anterior (atrás)</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>D</kbd></div><span class="shortcut-desc">Guardar en favoritos ★</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>H</kbd></div><span class="shortcut-desc">Ver historial</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>J</kbd></div><span class="shortcut-desc">Ver descargas</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>F</kbd></div><span class="shortcut-desc">Buscar en la página</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>+</kbd></div><span class="shortcut-desc">Aumentar zoom</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>-</kbd></div><span class="shortcut-desc">Reducir zoom</span></div>
+        </div>
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-user-secret"></i>Modo incógnito</p>
+        <div class="tips-list">
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-eye-slash"></i></div><p class="tip-text"><strong>¿Qué es?</strong> Una ventana especial donde Chrome no guarda el historial, cookies ni contraseñas. Al cerrarla, todo desaparece automáticamente.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-check-circle"></i></div><p class="tip-text"><strong>¿Cuándo usarlo?</strong> En ordenadores compartidos (trabajo, biblioteca) para que nadie vea qué has hecho. También para iniciar sesión en otra cuenta.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-times-circle"></i></div><p class="tip-text"><strong>¿Qué NO hace?</strong> No te hace anónimo en internet. Tu proveedor de internet y las páginas web siguen viéndote. Solo evita el rastro local.</p></div>
+        </div>
+        <div class="info-box red"><i class="fas fa-exclamation-triangle"></i><span><strong>Ventanas emergentes falsas:</strong> Si aparece "¡Tu PC tiene un virus! Llama al 900 000 000", es una estafa. Cierra esa pestaña con <kbd style="background:rgba(220,80,80,.2);border:1px solid rgba(220,80,80,.4);color:hsl(0,65%,82%);border-radius:5px;padding:1px 7px;font-size:11px;">Ctrl + W</kbd>. Nunca llames a esos números.</span></div>
+      </div>
+    </section>
+
+    <!-- 03 NOTIFICACIONES -->
+    <section class="topic-section" id="s3">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-num">03</div>
+        <div class="section-icon-box" style="background:rgba(239,83,80,.12);color:#ef5350;"><i class="fas fa-bell-slash"></i></div>
+        <div><p class="section-title">Eliminar Notificaciones del Navegador</p><p class="section-subtitle">Esas molestas alertas que aparecen en la esquina — en Chrome</p></div>
+        <i class="fas fa-chevron-down toggle-arrow"></i>
+      </div>
+      <div class="section-body">
+        <div class="info-box yellow" style="margin-top:0;margin-bottom:18px;"><i class="fas fa-question-circle"></i><span><strong>¿Qué son?</strong> Muchas webs piden permiso para enviarte notificaciones (globos en la esquina de la pantalla). Si aceptaste sin querer, ahora recibes avisos constantemente. Vamos a quitarlos desde Chrome.</span></div>
+        <p class="sub-heading"><i class="fab fa-chrome"></i>Paso a paso en Chrome</p>
+        <div class="chrome-path"><i class="fas fa-ellipsis-v" style="color:var(--green-lime);"></i><span class="step-lbl">⋮ Tres puntos</span><span class="arrow">→</span><span class="step-lbl">Configuración</span><span class="arrow">→</span><span class="step-lbl">Privacidad y seguridad</span><span class="arrow">→</span><span class="step-lbl">Configuración del sitio</span><span class="arrow">→</span><span class="step-lbl">Notificaciones</span></div>
+        <div class="tips-list">
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-ellipsis-v"></i></div><p class="tip-text"><strong>Paso 1:</strong> Haz clic en los <strong>tres puntos verticales ⋮</strong> en la esquina superior derecha de Chrome.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-cog"></i></div><p class="tip-text"><strong>Paso 2:</strong> Haz clic en <strong>"Configuración"</strong> en el menú que aparece.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-lock"></i></div><p class="tip-text"><strong>Paso 3:</strong> En el menú izquierdo, clic en <strong>"Privacidad y seguridad"</strong> y después en <strong>"Configuración del sitio"</strong>.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-bell"></i></div><p class="tip-text"><strong>Paso 4:</strong> Baja y haz clic en <strong>"Notificaciones"</strong>. Verás la lista de webs que tienen permiso.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-trash-alt"></i></div><p class="tip-text"><strong>Paso 5:</strong> Junto a cada web, tres puntos → <strong>"Eliminar"</strong> o <strong>"Bloquear"</strong>.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-ban"></i></div><p class="tip-text"><strong>Truco definitivo:</strong> Activa <strong>"No permitir que los sitios envíen notificaciones"</strong> y ninguna web podrá pedírtelas en el futuro.</p></div>
+        </div>
+        <div class="info-box green"><i class="fas fa-check-circle"></i><span><strong>Prevención:</strong> Cuando Chrome muestre "¿Quieres recibir notificaciones?", pulsa siempre <strong>"Bloquear"</strong>. Solo acepta si es un servicio que usas a diario.</span></div>
+      </div>
+    </section>
+
+    <!-- 04 COOKIES -->
+    <section class="topic-section" id="s4">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-num">04</div>
+        <div class="section-icon-box" style="background:rgba(255,213,79,.12);color:#ffd54f;"><i class="fas fa-cookie-bite"></i></div>
+        <div><p class="section-title">Cookies, Historial y Caché en Chrome</p><p class="section-subtitle">Qué son y cómo limpiar los datos de navegación</p></div>
+        <i class="fas fa-chevron-down toggle-arrow"></i>
+      </div>
+      <div class="section-body">
+        <div class="info-box blue" style="margin-top:0;margin-bottom:18px;"><i class="fas fa-info-circle"></i><span><strong>Cookies:</strong> archivitos que las webs guardan en tu PC para recordar tu sesión e idioma. <strong>Caché:</strong> imágenes guardadas para que las páginas carguen más rápido. Limpiarlos de vez en cuando mejora el rendimiento.</span></div>
+        <p class="sub-heading"><i class="fas fa-broom"></i>Borrar datos de navegación en Chrome</p>
+        <div class="chrome-path"><i class="fas fa-ellipsis-v" style="color:var(--green-lime);"></i><span class="step-lbl">⋮ Tres puntos</span><span class="arrow">→</span><span class="step-lbl">Configuración</span><span class="arrow">→</span><span class="step-lbl">Privacidad y seguridad</span><span class="arrow">→</span><span class="step-lbl">Borrar datos de navegación</span></div>
+        <div class="tips-list">
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-keyboard"></i></div><p class="tip-text"><strong>Método rápido:</strong> Pulsa <code>Ctrl + Shift + Supr</code>. Abre directamente la ventana de borrado.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-calendar-alt"></i></div><p class="tip-text"><strong>Elige el período:</strong> Última hora, último día, o <strong>"Desde siempre"</strong> para borrar todo.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-check-square"></i></div><p class="tip-text"><strong>Qué marcar:</strong> <strong>"Cookies y otros datos de sitios"</strong> y <strong>"Imágenes y archivos en caché"</strong>. El historial es opcional.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-trash"></i></div><p class="tip-text"><strong>Borrar datos:</strong> Haz clic en <strong>"Borrar datos"</strong>. Después tendrás que volver a iniciar sesión en las páginas.</p></div>
+        </div>
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-history"></i>Ver y borrar el historial</p>
+        <div class="tips-list">
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-list"></i></div><p class="tip-text"><strong>Ver historial (Ctrl+H):</strong> Muestra todas las páginas visitadas ordenadas por fecha. Puedes borrar entradas individuales o todo.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-user-secret"></i></div><p class="tip-text"><strong>Modo incógnito (Ctrl+Shift+N):</strong> Si navegas en incógnito, Chrome no guarda nada. Al cerrar la ventana todo desaparece.</p></div>
+        </div>
+        <div class="info-box red"><i class="fas fa-exclamation-triangle"></i><span><strong>Aviso:</strong> Borrar las cookies cierra tu sesión en todas las páginas (correo, banco, redes sociales). Asegúrate de recordar tus contraseñas antes.</span></div>
+      </div>
+    </section>
+
+    <!-- 05 OFFICE -->
+    <section class="topic-section" id="s5">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-num">05</div>
+        <div class="section-icon-box" style="background:rgba(102,187,106,.12);color:#66bb6a;"><i class="fas fa-file-alt"></i></div>
+        <div><p class="section-title">Pack Office: Word, Excel y PowerPoint</p><p class="section-subtitle">Las herramientas más usadas en el trabajo y en el día a día</p></div>
+        <i class="fas fa-chevron-down toggle-arrow"></i>
+      </div>
+      <div class="section-body">
+        <div class="info-box blue" style="margin-top:0;margin-bottom:20px;"><i class="fas fa-info-circle"></i><span><strong>Microsoft Office</strong> es el conjunto de programas de oficina más usado del mundo. También existe versión gratuita online que funciona directamente desde Chrome en <strong>office.com</strong>.</span></div>
+        <div class="office-grid">
+          <div class="office-card" style="border-top:3px solid #2b5ce6;"><span class="app-icon">📄</span><h4>Word</h4><p>Procesador de texto. Para documentos, cartas, informes y currículums.</p><span class="app-tag" style="background:rgba(43,92,230,.15);color:#7b9ff5;">Documentos</span></div>
+          <div class="office-card" style="border-top:3px solid #1d6f42;"><span class="app-icon">📊</span><h4>Excel</h4><p>Hojas de cálculo. Para tablas, cuentas, listas, facturas y presupuestos.</p><span class="app-tag" style="background:rgba(29,111,66,.15);color:#6fcf97;">Cálculos</span></div>
+          <div class="office-card" style="border-top:3px solid #c43e1c;"><span class="app-icon">📽️</span><h4>PowerPoint</h4><p>Presentaciones con diapositivas. Para exponer proyectos o dar charlas.</p><span class="app-tag" style="background:rgba(196,62,28,.15);color:#f4a98a;">Presentaciones</span></div>
+          <div class="office-card" style="border-top:3px solid #0078d4;"><span class="app-icon">📧</span><h4>Outlook</h4><p>Correo electrónico y calendario. Para gestionar emails de forma profesional.</p><span class="app-tag" style="background:rgba(0,120,212,.15);color:#7ec8f5;">Correo</span></div>
+        </div>
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-file-word"></i>Word: atajos y funciones clave</p>
+        <div class="shortcuts-grid">
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>G</kbd></div><span class="shortcut-desc">Guardar el documento</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>Z</kbd></div><span class="shortcut-desc">Deshacer último cambio</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>N</kbd></div><span class="shortcut-desc">Negrita al texto seleccionado</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>C</kbd></div><span class="shortcut-desc">Copiar texto seleccionado</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>V</kbd></div><span class="shortcut-desc">Pegar lo copiado</span></div>
+          <div class="shortcut-row"><div class="kbd-group"><kbd>Ctrl</kbd><kbd class="plus">+</kbd><kbd>P</kbd></div><span class="shortcut-desc">Imprimir el documento</span></div>
+        </div>
+        <div class="info-box green"><i class="fas fa-cloud"></i><span><strong>Alternativa gratuita desde Chrome:</strong> Ve a <strong>docs.google.com</strong> para Google Docs (Word gratis), <strong>sheets.google.com</strong> para Google Sheets (Excel gratis). Solo necesitas una cuenta de Google.</span></div>
+      </div>
+    </section>
+
+    <!-- 06 SEGURIDAD -->
+    <section class="topic-section" id="s6">
+      <div class="section-head" onclick="toggleSection(this)">
+        <div class="section-num">06</div>
+        <div class="section-icon-box" style="background:rgba(171,71,188,.14);color:#ba68c8;"><i class="fas fa-shield-alt"></i></div>
+        <div><p class="section-title">Seguridad Informática: Navega sin Miedo</p><p class="section-subtitle">Fraudes, webs seguras y cómo proteger tu información</p></div>
+        <i class="fas fa-chevron-down toggle-arrow"></i>
+      </div>
+      <div class="section-body">
+        <div class="info-box red" style="margin-top:0;margin-bottom:18px;"><i class="fas fa-exclamation-triangle"></i><span><strong>La amenaza más común no son los virus, sino el engaño.</strong> La mayoría de los ataques explotan a personas que no reconocen un fraude. Con conocimiento básico, estás protegido.</span></div>
+        <p class="sub-heading"><i class="fas fa-lock"></i>Cómo saber si una web es segura</p>
+        <div class="steps-grid">
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-lock"></i></div><span class="step-name">El candado y HTTPS</span></div><p class="step-desc">Webs seguras empiezan por <strong>https://</strong> y muestran un candado 🔒 en Chrome. "No seguro" = cuidado con lo que escribes.</p></div>
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-spell-check"></i></div><span class="step-name">Faltas de ortografía</span></div><p class="step-desc">Webs fraudulentas copian diseños reales pero cometen errores. <em>"Am4zon"</em> o <em>"Santander-seguro.net"</em> no son reales.</p></div>
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-globe-europe"></i></div><span class="step-name">Comprueba el dominio</span></div><p class="step-desc">Lo que está justo antes del .com/.es es el dominio real. En "banco.<strong>estafa.com</strong>" el dominio es <strong>estafa.com</strong>.</p></div>
+          <div class="step-card"><div class="step-header"><div class="step-badge"><i class="fas fa-star"></i></div><span class="step-name">Busca opiniones</span></div><p class="step-desc">Si no conoces una tienda, búscala en Google añadiendo "opiniones" o "estafa". Otros usuarios habrán avisado si hay problemas.</p></div>
+        </div>
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-fish"></i>Phishing: la suplantación de identidad</p>
+        <div class="tips-list">
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-envelope"></i></div><p class="tip-text"><strong>Email del banco:</strong> Tu banco <strong>nunca</strong> pide contraseñas por email. Si recibes uno así, llama al teléfono oficial. No hagas clic en ningún enlace.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-mobile-alt"></i></div><p class="tip-text"><strong>SMS falso de Correos/Hacienda:</strong> "Tu paquete está retenido, paga 1,50€" es una estafa muy común. Nunca uses el enlace del SMS; entra directamente a la web oficial.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-clock"></i></div><p class="tip-text"><strong>Urgencia artificial:</strong> "Actúa en 24h o pierdes tu cuenta" es manipulación. Las entidades reales nunca te meten tanta prisa por un canal electrónico.</p></div>
+        </div>
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-key"></i>Contraseñas seguras</p>
+        <div style="margin-bottom:14px;">
+          <div class="progress-row"><span class="progress-label">Longitud mínima (12 caracteres)</span><div class="progress-bar-wrap"><div class="progress-fill" style="width:90%"></div></div></div>
+          <div class="progress-row"><span class="progress-label">Mayúsculas y minúsculas</span><div class="progress-bar-wrap"><div class="progress-fill" style="width:80%"></div></div></div>
+          <div class="progress-row"><span class="progress-label">Números incluidos</span><div class="progress-bar-wrap"><div class="progress-fill" style="width:75%"></div></div></div>
+          <div class="progress-row"><span class="progress-label">Símbolos (!, @, #...)</span><div class="progress-bar-wrap"><div class="progress-fill" style="width:85%"></div></div></div>
+          <div class="progress-row"><span class="progress-label">Diferente en cada cuenta</span><div class="progress-bar-wrap"><div class="progress-fill" style="width:100%"></div></div></div>
+        </div>
+        <div class="tips-list">
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-times-circle"></i></div><p class="tip-text"><strong>Prohibidas:</strong> <code>123456</code>, <code>password</code>, tu nombre, tu fecha de nacimiento.</p></div>
+          <div class="tip-item"><div class="tip-icon"><i class="fas fa-lightbulb"></i></div><p class="tip-text"><strong>Truco fácil:</strong> Usa una frase que recuerdes: <em>"MiPerroSeL1amaR0ky!"</em> es muy segura y fácil de memorizar.</p></div>
+        </div>
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-list-check"></i>Las 4 reglas de oro</p>
+        <div class="steps-grid">
+          <div class="step-card" style="border-left:3px solid var(--green-lime);"><div class="step-header"><div class="step-badge"><i class="fas fa-check"></i></div><span class="step-name">Desconfía siempre</span></div><p class="step-desc">Si algo parece demasiado bueno o muy urgente, probablemente sea un fraude.</p></div>
+          <div class="step-card" style="border-left:3px solid var(--green-lime);"><div class="step-header"><div class="step-badge"><i class="fas fa-check"></i></div><span class="step-name">Verifica antes de actuar</span></div><p class="step-desc">Antes de hacer clic, pagar o dar datos, comprueba la URL y llama al número oficial si tienes dudas.</p></div>
+          <div class="step-card" style="border-left:3px solid var(--green-lime);"><div class="step-header"><div class="step-badge"><i class="fas fa-check"></i></div><span class="step-name">No compartas datos</span></div><p class="step-desc">Ninguna empresa legítima pide contraseñas, PIN del banco o DNI por email o teléfono.</p></div>
+          <div class="step-card" style="border-left:3px solid var(--green-lime);"><div class="step-header"><div class="step-badge"><i class="fas fa-check"></i></div><span class="step-name">Cierra sesión siempre</span></div><p class="step-desc">En ordenadores compartidos, cierra sesión en todas las webs al terminar.</p></div>
+        </div>
+        <div class="info-box red"><i class="fas fa-phone-alt"></i><span><strong>Estafa del soporte técnico:</strong> Si recibes una llamada de "Microsoft" diciendo que tu PC tiene un virus, <strong>cuelga inmediatamente</strong>. Microsoft nunca llama proactivamente a usuarios particulares.</span></div>
+
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-key"></i>Validador de Contrasenas — Prueba la tuya</p>
+        <div class="tool-card">
+          <div class="pwd-input-wrap">
+            <input type="password" id="pwdInput" class="tool-input" placeholder="Escribe una contrasena para analizarla..." oninput="checkPassword(this.value)">
+            <button class="tool-eye-btn" onclick="togglePwd()"><i class="fas fa-eye" id="pwdEyeIcon"></i></button>
+          </div>
+          <div class="strength-bar-wrap"><div class="strength-bar-fill" id="pwdBar"></div></div>
+          <div class="strength-label" id="pwdLabel">Escribe una contrasena para ver su nivel de seguridad</div>
+          <div class="pwd-criteria" id="pwdCriteria">
+            <div class="crit-item" id="crit-len"><i class="fas fa-times-circle"></i>Minimo 12 caracteres</div>
+            <div class="crit-item" id="crit-upper"><i class="fas fa-times-circle"></i>Contiene mayusculas</div>
+            <div class="crit-item" id="crit-lower"><i class="fas fa-times-circle"></i>Contiene minusculas</div>
+            <div class="crit-item" id="crit-num"><i class="fas fa-times-circle"></i>Contiene numeros</div>
+            <div class="crit-item" id="crit-sym"><i class="fas fa-times-circle"></i>Contiene simbolos (!@#$...)</div>
+            <div class="crit-item" id="crit-common"><i class="fas fa-times-circle"></i>No es una contrasena comun</div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+        <p class="sub-heading"><i class="fas fa-globe"></i>Comprobador de Webs — Es fiable esta pagina?</p>
+        <div class="tool-card">
+          <div class="pwd-input-wrap">
+            <input type="text" id="urlInput" class="tool-input" placeholder="Escribe una URL, ej: www.amazon.es o www.amaz0n-oferta.net">
+            <button class="tool-check-btn" onclick="checkURL()"><i class="fas fa-search"></i>Analizar</button>
+          </div>
+          <div id="urlResult" class="url-result" style="display:none;"></div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- TAB APUNTES -->
+<div class="tab-panel" id="tab-apuntes">
+  <div class="apuntes-grid">
+
+    <div class="apuntes-card full">
+      <h3><i class="fas fa-pencil-alt"></i>Mis Apuntes Personales</h3>
+      <div class="notas-toolbar">
+        <button class="notas-btn" onclick="insertText('• ')"><i class="fas fa-list"></i>Punto</button>
+        <button class="notas-btn" onclick="insertText('✅ ')"><i class="fas fa-check"></i>Hecho</button>
+        <button class="notas-btn" onclick="insertText('❓ ')"><i class="fas fa-question"></i>Duda</button>
+        <button class="notas-btn" onclick="insertText('⚠️ ')"><i class="fas fa-exclamation-triangle"></i>Importante</button>
+        <button class="notas-btn" onclick="clearNotas()"><i class="fas fa-trash-alt"></i>Borrar todo</button>
+        <button class="notas-btn" onclick="printNotas()"><i class="fas fa-print"></i>Imprimir</button>
+      </div>
+      <textarea class="notas-area" id="notas" placeholder="Escribe aquí tus apuntes durante la clase..." oninput="autoSave()"></textarea>
+      <div class="notas-saved" id="notas-saved"><i class="fas fa-check-circle"></i> Apuntes guardados automáticamente</div>
+    </div>
+
+    <div class="apuntes-card">
+      <h3><i class="fas fa-book"></i>Glosario de Términos</h3>
+      <div class="glosario-list">
+        <div class="glosario-item"><span class="glosario-term">Navegador</span><span class="glosario-def">Programa para visitar páginas de internet (Chrome, Edge, Firefox).</span></div>
+        <div class="glosario-item"><span class="glosario-term">URL</span><span class="glosario-def">La "dirección" de una página web. Ej: www.google.com</span></div>
+        <div class="glosario-item"><span class="glosario-term">HTTPS</span><span class="glosario-def">Protocolo seguro. Las webs con candado 🔒 son de confianza.</span></div>
+        <div class="glosario-item"><span class="glosario-term">Cookie</span><span class="glosario-def">Archivo que guarda una web en tu PC para recordar tu sesión.</span></div>
+        <div class="glosario-item"><span class="glosario-term">Caché</span><span class="glosario-def">Copias guardadas de páginas web para que carguen más rápido.</span></div>
+        <div class="glosario-item"><span class="glosario-term">Historial</span><span class="glosario-def">Registro de todas las páginas que has visitado en el navegador.</span></div>
+        <div class="glosario-item"><span class="glosario-term">Incógnito</span><span class="glosario-def">Modo de Chrome que no guarda historial ni cookies al cerrar.</span></div>
+        <div class="glosario-item"><span class="glosario-term">Phishing</span><span class="glosario-def">Engaño que suplanta a bancos o empresas para robar datos.</span></div>
+        <div class="glosario-item"><span class="glosario-term">Pestaña</span><span class="glosario-def">Cada "hoja" abierta en Chrome. Puedes tener varias a la vez.</span></div>
+        <div class="glosario-item"><span class="glosario-term">Dominio</span><span class="glosario-def">El nombre principal de una web, antes del .com o .es</span></div>
+        <div class="glosario-item"><span class="glosario-term">Notificación</span><span class="glosario-def">Aviso emergente que envían webs si les diste permiso.</span></div>
+        <div class="glosario-item"><span class="glosario-term">Malware</span><span class="glosario-def">Programa malicioso. Windows Defender te protege de él.</span></div>
+      </div>
+    </div>
+
+    <div class="apuntes-card">
+      <h3><i class="fas fa-tasks"></i>Checklist: ¿Qué he aprendido?</h3>
+      <div class="checklist">
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Sé encender y apagar el ordenador correctamente</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Sé reiniciar Windows desde el menú Inicio</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Sé abrir Google Chrome</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Sé escribir una dirección web en Chrome</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Sé abrir una nueva pestaña (Ctrl+T)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Sé usar el modo incógnito (Ctrl+Shift+N)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Sé eliminar las notificaciones no deseadas</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Sé borrar cookies y caché (Ctrl+Shift+Supr)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Sé usar Word para escribir y guardar documentos</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Reconozco una web segura (candado + https)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Sé identificar un intento de phishing</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="fas fa-check"></i></div><span class="check-label">Creo contraseñas seguras y diferentes</span></div>
+      </div>
+    </div>
+
+    <div class="apuntes-card full">
+      <h3><i class="fas fa-file-alt"></i>Resumen del Curso — Para Imprimir</h3>
+      <div class="resumen-section"><h4><i class="fas fa-desktop"></i>El Ordenador</h4><ul class="resumen-list"><li>Botón ⏻ para encender. Esperar a que cargue Windows sin tocar nada.</li><li>Apagar siempre por: Inicio → Encendido → Apagar. Nunca desenchufar en caliente.</li><li>Reiniciar cuando algo falle: Inicio → Encendido → Reiniciar.</li><li>Bloqueo total: mantener el botón de encendido 5 segundos (último recurso).</li></ul></div>
+      <div class="resumen-section"><h4><i class="fab fa-chrome"></i>Google Chrome</h4><ul class="resumen-list"><li>Doble clic en el icono de Chrome o buscarlo en el menú Inicio.</li><li>Barra de dirección (arriba): escribe la web o lo que buscas → Enter.</li><li>Nueva pestaña: Ctrl+T · Cerrar pestaña: Ctrl+W · Recargar: F5.</li><li>Favoritos: clic en la estrella ★ de la barra de dirección (Ctrl+D).</li><li>Incógnito (Ctrl+Shift+N): no guarda historial ni cookies al cerrar.</li><li>Zoom: Ctrl+ (más grande) / Ctrl- (más pequeño).</li></ul></div>
+      <div class="resumen-section"><h4><i class="fas fa-bell-slash"></i>Notificaciones y Cookies</h4><ul class="resumen-list"><li>Eliminar notificaciones: ⋮ → Configuración → Privacidad → Configuración del sitio → Notificaciones.</li><li>Borrar cookies y caché: Ctrl+Shift+Supr → marcar opciones → "Borrar datos".</li><li>Ver historial: Ctrl+H. Borrarlo desde ahí si es necesario.</li><li>Al borrar cookies se cierra sesión en todas las webs. Recuerda las contraseñas.</li></ul></div>
+      <div class="resumen-section"><h4><i class="fas fa-file-alt"></i>Pack Office</h4><ul class="resumen-list"><li>Word: documentos de texto. Guardar siempre con Ctrl+G.</li><li>Excel: tablas y cálculos. Fórmulas empiezan con = (ej: =A1+A2).</li><li>PowerPoint: presentaciones con diapositivas.</li><li>Alternativa gratuita en Chrome: docs.google.com (solo necesitas cuenta Google).</li><li>Atajos universales: Ctrl+C copiar · Ctrl+V pegar · Ctrl+Z deshacer.</li></ul></div>
+      <div class="resumen-section"><h4><i class="fas fa-shield-alt"></i>Seguridad Informática</h4><ul class="resumen-list"><li>Web segura: candado 🔒 + https:// en la barra de Chrome.</li><li>Phishing: emails o SMS que se hacen pasar por tu banco o Correos para robar datos.</li><li>Nunca hagas clic en enlaces de emails sospechosos. Llama al número oficial.</li><li>Contraseña segura: mínimo 12 caracteres, mayúsculas, números y símbolos.</li><li>No repetir contraseñas. No usar: 123456, tu nombre, tu fecha de nacimiento.</li><li>Microsoft nunca llama para decirte que tienes un virus. Cuelga si ocurre.</li></ul></div>
+      <button class="print-btn" onclick="window.print()"><i class="fas fa-print"></i>Imprimir este resumen</button>
+    </div>
+
+  </div>
+</div>
+
+<footer class="course-footer">
+  <p>Curso preparado por <strong>Alejandro Bautista Jorge</strong> · Desarrollador Web · Olivenza, España</p>
+  <p style="margin-top:5px;">¿Dudas? <strong>alexbaujor@gmail.com</strong> · <a href="https://theealex11.github.io" target="_blank">theealex11.github.io</a></p>
+</footer>
+
+</div>
+
+<script>
+(function() {
+  function killPreloader() {
+    var pre = document.getElementById('preloader');
+    if (!pre) return;
+    pre.classList.add('fade-out');
+    setTimeout(function() { if (pre && pre.parentNode) pre.parentNode.removeChild(pre); }, 500);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(killPreloader, 300); });
+  } else { setTimeout(killPreloader, 100); }
+  window.addEventListener('load', function() { setTimeout(killPreloader, 200); });
+  setTimeout(killPreloader, 1500);
+})();
+
+function closePopup() {
+  var p = document.getElementById('welcomePopup');
+  p.style.opacity = '0'; p.style.transition = 'opacity .3s ease';
+  setTimeout(function() { p.style.display = 'none'; }, 300);
+  try { localStorage.setItem('curso-visited', '1'); } catch(e) {}
+}
+(function() {
+  var visited = false;
+  try { visited = !!localStorage.getItem('curso-visited'); } catch(e) {}
+  if (!visited) { setTimeout(function() { document.getElementById('welcomePopup').style.display = 'flex'; }, 800); }
+})();
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'contenido') { setTimeout(initReveal, 50); setTimeout(updateActiveNav, 60); }
+}
+
+function toggleSection(head) { head.closest('.topic-section').classList.toggle('open'); }
+
+function initReveal() {
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e, i) {
+      if (e.isIntersecting) { setTimeout(function() { e.target.classList.add('visible'); }, i * 70); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.topic-section:not(.visible)').forEach(function(s) { obs.observe(s); });
+}
+initReveal();
+
+var navBtns = document.querySelectorAll('.nav-btn');
+function setActiveNav(id) {
+  navBtns.forEach(function(b) { b.classList.remove('scroll-active'); });
+  var a = document.querySelector('.nav-btn[href="#' + id + '"]');
+  if (a) a.classList.add('scroll-active');
+}
+navBtns.forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var href = this.getAttribute('href');
+    if (href && href.charAt(0) === '#') { setActiveNav(href.slice(1)); }
+  });
+});
+function updateActiveNav() {
+  var sections = document.querySelectorAll('.topic-section');
+  var scrollY = window.scrollY || window.pageYOffset;
+  var current = null;
+  sections.forEach(function(s) {
+    var top = s.getBoundingClientRect().top + scrollY - 140;
+    if (scrollY >= top) { current = s.id; }
+  });
+  if (current) { setActiveNav(current); }
+}
+window.addEventListener('scroll', updateActiveNav, { passive: true });
+updateActiveNav();
+
+document.querySelector('.topic-section').classList.add('open');
+
+var notasEl = document.getElementById('notas');
+try { var saved = localStorage.getItem('curso-notas'); if (saved) notasEl.value = saved; } catch(e) {}
+var saveTimer;
+function autoSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    try { localStorage.setItem('curso-notas', notasEl.value); } catch(e) {}
+    var el = document.getElementById('notas-saved');
+    el.classList.add('show');
+    setTimeout(function() { el.classList.remove('show'); }, 2500);
+  }, 800);
+}
+function insertText(txt) {
+  var s = notasEl.selectionStart, e2 = notasEl.selectionEnd, v = notasEl.value;
+  notasEl.value = v.substring(0, s) + txt + v.substring(e2);
+  notasEl.selectionStart = notasEl.selectionEnd = s + txt.length;
+  notasEl.focus(); autoSave();
+}
+function clearNotas() {
+  if (confirm("Borrar todos los apuntes?")) {
+    notasEl.value = "";
+    try { localStorage.removeItem("curso-notas"); } catch(e) {}
+  }
+}
+function printNotas() {
+  var txt = notasEl.value || "(sin apuntes)";
+  var w = window.open("", "_blank");
+  var h = "<html><head><title>Mis Apuntes<\/title><style>body{font-family:Arial;padding:30px;color:#111;white-space:pre-wrap;font-size:14px;line-height:1.7;}<\/style><\/head><body><h2 style='color:#0078d4'>Mis Apuntes<\/h2>" + txt.replace(/</g,"&lt;") + "<\/body><\/html>";
+  w.document.write(h); w.document.close(); w.print();
+}
+function toggleCheck(item) { item.classList.toggle('done'); }
+
+var commonPasswords = ['123456','password','123456789','12345678','12345','1234567','qwerty','abc123','111111','123123','admin','letmein','welcome','monkey','dragon','master','sunshine','princess','football','shadow'];
+
+function togglePwd() {
+  var inp = document.getElementById('pwdInput');
+  var icon = document.getElementById('pwdEyeIcon');
+  if (inp.type === 'password') { inp.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+  else { inp.type = 'password'; icon.className = 'fas fa-eye'; }
+}
+
+function checkPassword(val) {
+  var bar = document.getElementById('pwdBar');
+  var label = document.getElementById('pwdLabel');
+  var c = {
+    len:    val.length >= 12,
+    upper:  /[A-Z]/.test(val),
+    lower:  /[a-z]/.test(val),
+    num:    /[0-9]/.test(val),
+    sym:    /[^A-Za-z0-9]/.test(val),
+    common: val.length > 0 && commonPasswords.indexOf(val.toLowerCase()) === -1
+  };
+  var ids = ['crit-len','crit-upper','crit-lower','crit-num','crit-sym','crit-common'];
+  var keys = ['len','upper','lower','num','sym','common'];
+  keys.forEach(function(k, i) {
+    var el = document.getElementById(ids[i]);
+    var ic = el.querySelector('i');
+    if (c[k]) { el.className = 'crit-item pass'; ic.className = 'fas fa-check-circle'; }
+    else { el.className = 'crit-item fail'; ic.className = 'fas fa-times-circle'; }
+  });
+  var score = keys.filter(function(k){ return c[k]; }).length;
+  var pct = val.length === 0 ? 0 : Math.round((score / 6) * 100);
+  bar.style.width = pct + '%';
+  var levels = [
+    [0,   '#555',             'Escribe una contrasena para ver su nivel'],
+    [33,  'hsl(0,70%,55%)',   'Muy debil - Nada segura, cambiala ya'],
+    [50,  'hsl(20,80%,55%)',  'Debil - Necesita mejoras importantes'],
+    [66,  'hsl(42,80%,55%)',  'Moderada - Puede mejorar bastante'],
+    [83,  'hsl(80,60%,50%)',  'Buena - Solo le falta algun detalle'],
+    [101, 'hsl(150,60%,50%)', 'Excelente - Contrasena muy segura!']
+  ];
+  var lvl = levels[0];
+  for (var i = 0; i < levels.length; i++) { if (pct <= levels[i][0]) { lvl = levels[i]; break; } }
+  bar.style.background = lvl[1]; label.style.color = lvl[1]; label.textContent = lvl[2];
+}
+
+function checkURL() {
+  var raw = document.getElementById('urlInput').value.trim();
+  var result = document.getElementById('urlResult');
+  if (!raw) { result.style.display = 'none'; return; }
+  var url = raw.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '');
+  var domain = url.split('/')[0];
+  var flags = [], score = 0;
+  var knownSafe = ['google.com','google.es','youtube.com','amazon.es','amazon.com','paypal.com','paypal.es','microsoft.com','apple.com','facebook.com','instagram.com','twitter.com','x.com','linkedin.com','elcorteingles.es','zara.com','fnac.es','mediamarkt.es','correos.es','agenciatributaria.gob.es','seg-social.es','boe.es'];
+  var isSafe = knownSafe.some(function(s) { return domain === s || domain.endsWith('.' + s); });
+  if (isSafe) { score += 3; flags.push({ ok:true, t:'Dominio reconocido y de confianza' }); }
+  ['seguro','secure','login','verify','bank','paypal','amazon','correos','hacienda','oferta','gratis','premio'].forEach(function(w) {
+    if (domain.includes(w) && !isSafe) { score--; flags.push({ ok:false, t:'Contiene la palabra sospechosa: "' + w + '"' }); }
+  });
+  if (/[0-9]/.test(domain.replace(/[.][a-z]{2,6}$/, '')) && !isSafe) { score--; flags.push({ ok:false, t:'El dominio contiene numeros (ej: amaz0n)' }); }
+  if (/[.](xyz|top|click|online|site|club|tk|ml|ga|cf)$/.test(domain)) { score--; flags.push({ ok:false, t:'Extension de dominio poco habitual, frecuente en estafas' }); }
+  if (domain.split('-').length - 1 >= 2) { score--; flags.push({ ok:false, t:'Muchos guiones - tactica habitual de phishing' }); }
+  if (raw.startsWith('https://')) { score++; flags.push({ ok:true, t:'Usa HTTPS (conexion cifrada)' }); }
+  else { score--; flags.push({ ok:false, t:'No usa HTTPS - la conexion no esta cifrada' }); }
+  if (domain.length > 30) { score--; flags.push({ ok:false, t:'Dominio muy largo - inusual en sitios legitimos' }); }
+  if (domain.split('.').length >= 4 && !isSafe) { score--; flags.push({ ok:false, t:'Muchos subdominios - puede intentar imitar otra web' }); }
+  if (flags.length === 0) { flags.push({ ok:true, t:'No se detectaron senales de alarma evidentes' }); }
+  var tipo, icon, titulo;
+  if (score >= 3) { tipo='safe'; icon='fa-check-circle'; titulo='Parece un sitio de confianza'; }
+  else if (score >= 0) { tipo='warning'; icon='fa-exclamation-triangle'; titulo='Precaucion - Verifica antes de introducir datos'; }
+  else { tipo='danger'; icon='fa-times-circle'; titulo='Sospechoso - Podria ser una estafa'; }
+  var html = '<div class="url-result-title"><i class="fas ' + icon + '"></i>' + titulo + '</div><div class="url-checks">';
+  flags.forEach(function(f) {
+    var col = f.ok ? 'hsl(150,60%,60%)' : 'hsl(0,65%,65%)';
+    var ic = f.ok ? 'fa-check-circle' : 'fa-times-circle';
+    html += '<div class="url-check-row"><i class="fas ' + ic + '" style="color:' + col + '"></i>' + f.t + '</div>';
+  });
+  html += '</div>';
+  if (tipo !== 'safe') html += '<p style="margin-top:10px;font-size:11px;opacity:.7;">Comprobador orientativo. Ante la duda, no introduzcas datos personales ni bancarios.</p>';
+  result.className = 'url-result ' + tipo;
+  result.innerHTML = html;
+  result.style.display = 'block';
+}
+document.getElementById('urlInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') checkURL(); });
+</script>
+</body>
+</html>
