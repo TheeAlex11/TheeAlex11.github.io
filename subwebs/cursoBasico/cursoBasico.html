@@ -176,12 +176,17 @@ kbd.plus{background:none;border:none;color:var(--light-gray-70);font-size:14px;p
 
 /* TOOL CARDS (validadores) */
 .tool-card{background:rgba(40,40,40,.6);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px;margin-bottom:4px;}
-.pwd-input-wrap{position:relative;display:flex;gap:8px;margin-bottom:12px;}
-.tool-input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 16px;color:var(--light-gray);font-family:var(--ff-poppins);font-size:var(--fs-6);transition:border-color .25s,box-shadow .25s;}
+.pwd-input-wrap{position:relative;display:flex;gap:8px;margin-bottom:12px;width:100%;min-width:0;}
+.tool-input{flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 16px;color:var(--light-gray);font-family:var(--ff-poppins);font-size:var(--fs-6);transition:border-color .25s,box-shadow .25s;width:100%;}
 .tool-input:focus{outline:none;border-color:rgba(14,144,225,.5);box-shadow:0 0 0 3px hsla(203,88%,47%,.1);}
-.tool-input::placeholder{color:var(--light-gray-70);opacity:.6;}
-.tool-eye-btn,.tool-check-btn{flex-shrink:0;background:rgba(14,144,225,.12);border:1px solid rgba(14,144,225,.3);border-radius:10px;color:var(--green-lime);font-family:var(--ff-poppins);font-size:var(--fs-7);padding:0 16px;cursor:pointer;transition:all var(--transition-1);display:flex;align-items:center;gap:6px;}
+.tool-input::placeholder{color:var(--light-gray-70);opacity:.6;font-size:var(--fs-7);}
+.tool-eye-btn,.tool-check-btn{flex-shrink:0;width:44px;min-width:44px;background:rgba(14,144,225,.12);border:1px solid rgba(14,144,225,.3);border-radius:10px;color:var(--green-lime);font-family:var(--ff-poppins);font-size:var(--fs-7);padding:0;cursor:pointer;transition:all var(--transition-1);display:flex;align-items:center;justify-content:center;gap:4px;}
+.tool-check-btn{width:auto;min-width:44px;padding:0 14px;}
 .tool-eye-btn:hover,.tool-check-btn:hover{background:rgba(14,144,225,.25);box-shadow:0 4px 14px hsla(203,88%,47%,.2);}
+@media(max-width:480px){
+  .tool-check-btn .btn-label{display:none;}
+  .tool-check-btn{width:44px;padding:0;}
+}
 
 .strength-bar-wrap{width:100%;height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;margin-bottom:8px;}
 .strength-bar-fill{height:100%;width:0%;border-radius:4px;transition:width .5s ease,background .4s ease;}
@@ -525,7 +530,7 @@ kbd.plus{background:none;border:none;color:var(--light-gray-70);font-size:14px;p
         <div class="tool-card">
           <div class="pwd-input-wrap">
             <input type="text" id="urlInput" class="tool-input" placeholder="Escribe una URL, ej: www.amazon.es o www.amaz0n-oferta.net">
-            <button class="tool-check-btn" onclick="checkURL()"><i class="fas fa-search"></i>Analizar</button>
+            <button class="tool-check-btn" onclick="checkURL()"><i class="fas fa-search"></i><span class="btn-label">Analizar</span></button>
           </div>
           <div id="urlResult" class="url-result" style="display:none;"></div>
         </div>
