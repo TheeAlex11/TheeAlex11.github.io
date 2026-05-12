@@ -222,6 +222,54 @@ kbd.plus{background:none;border:none;color:var(--light-gray-70);font-size:14px;p
 .popup-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green-lime),var(--green-bold));border:none;border-radius:12px;color:#fff;font-family:var(--ff-poppins);font-size:var(--fs-5);font-weight:var(--fw-600);padding:14px 32px;cursor:pointer;transition:all var(--transition-1);box-shadow:0 6px 20px hsla(203,88%,47%,.35);}
 .popup-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px hsla(203,88%,47%,.45);}
 
+/* QR PANEL */
+.qr-panel{padding-bottom:10px;}
+.qr-hero{text-align:center;background:rgba(30,30,30,.65);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:40px 30px 32px;margin-bottom:20px;backdrop-filter:blur(20px);}
+.qr-hero-icon{width:68px;height:68px;border-radius:18px;background:linear-gradient(135deg,var(--green-lime),var(--green-bold));display:flex;align-items:center;justify-content:center;font-size:1.9rem;color:#fff;margin:0 auto 18px;box-shadow:0 8px 24px hsla(203,88%,47%,.35);}
+.qr-hero h2{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:var(--fw-600);color:var(--white-2);margin-bottom:8px;}
+.qr-hero h2 span{background:var(--text-gradient-blue);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.qr-hero p{font-size:var(--fs-6);color:var(--light-gray-70);max-width:480px;margin:0 auto;}
+
+.qr-grid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start;}
+@media(max-width:760px){.qr-grid{grid-template-columns:1fr;}}
+
+.qr-card{background:rgba(30,30,30,.65);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:28px;backdrop-filter:blur(20px);text-align:center;}
+.qr-main-card{position:sticky;top:24px;}
+.qr-label{font-size:var(--fs-7);font-weight:var(--fw-600);color:var(--light-gray-70);text-transform:uppercase;letter-spacing:.06em;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:7px;}
+.qr-label i{color:var(--green-lime);}
+.qr-img-wrap{background:#1a1a2e;border-radius:16px;padding:16px;display:inline-block;margin-bottom:20px;border:2px solid rgba(14,144,225,.25);box-shadow:0 8px 32px rgba(0,0,0,.4);}
+.qr-img-wrap img{display:block;width:200px;height:200px;border-radius:8px;}
+.qr-steps{display:flex;flex-direction:column;gap:8px;text-align:left;}
+.qr-step{display:flex;align-items:center;gap:10px;font-size:var(--fs-7);color:var(--light-gray-70);}
+.qr-step-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(14,144,225,.15);border:1px solid rgba(14,144,225,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:var(--fw-600);color:var(--green-lime);}
+
+.qr-side{display:flex;flex-direction:column;gap:14px;}
+.qr-url-card,.qr-info-card,.qr-share-card{background:rgba(30,30,30,.65);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:22px;backdrop-filter:blur(20px);}
+.qr-url-label,.qr-info-title{font-size:var(--fs-7);font-weight:var(--fw-600);color:var(--light-gray-70);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.qr-url-label i,.qr-info-title i{color:var(--green-lime);}
+
+.qr-url-box{display:flex;align-items:center;gap:8px;background:rgba(14,144,225,.08);border:1px solid rgba(14,144,225,.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;min-width:0;}
+.qr-url-box span{flex:1;font-size:var(--fs-7);color:hsl(203,70%,82%);font-family:monospace;word-break:break-all;min-width:0;}
+.qr-copy-btn{flex-shrink:0;background:rgba(14,144,225,.12);border:1px solid rgba(14,144,225,.3);border-radius:8px;color:var(--green-lime);width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--transition-1);}
+.qr-copy-btn:hover{background:rgba(14,144,225,.25);}
+.qr-open-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(14,144,225,.13);border:1px solid rgba(14,144,225,.3);border-radius:10px;color:var(--green-lime);font-size:var(--fs-6);font-weight:var(--fw-500);padding:10px 18px;transition:all var(--transition-1);}
+.qr-open-btn:hover{background:rgba(14,144,225,.22);box-shadow:0 4px 16px hsla(203,88%,47%,.2);}
+
+.qr-device-list{display:flex;flex-direction:column;gap:10px;}
+.qr-device{display:flex;align-items:flex-start;gap:12px;background:rgba(40,40,40,.5);border:1px solid rgba(255,255,255,.05);border-radius:11px;padding:12px 14px;}
+.qr-device > i{font-size:1.3rem;color:var(--green-lime);flex-shrink:0;margin-top:2px;}
+.qr-device strong{display:block;font-size:var(--fs-6);color:var(--white-2);margin-bottom:2px;}
+.qr-device span{font-size:var(--fs-7);color:var(--light-gray-70);line-height:1.5;}
+
+.qr-share-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.qr-share-btn{display:inline-flex;align-items:center;gap:7px;border-radius:11px;font-family:var(--ff-poppins);font-size:var(--fs-6);font-weight:var(--fw-500);padding:10px 18px;cursor:pointer;transition:all var(--transition-1);border:none;text-decoration:none;}
+.qr-share-btn.whatsapp{background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);color:hsl(142,70%,70%);}
+.qr-share-btn.whatsapp:hover{background:rgba(37,211,102,.25);}
+.qr-share-btn.email{background:rgba(14,144,225,.13);border:1px solid rgba(14,144,225,.3);color:hsl(203,70%,75%);}
+.qr-share-btn.email:hover{background:rgba(14,144,225,.22);}
+.qr-share-btn.copy{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--light-gray);}
+.qr-share-btn.copy:hover{background:rgba(255,255,255,.12);}
+
 @media print{
   body{background:#fff!important;color:#111!important;}
   body::before,#preloader,.main-tabs,.topic-nav,.course-footer,.toggle-arrow,.notas-toolbar,.print-btn,.popup-overlay,.tool-card{display:none!important;}
@@ -283,6 +331,7 @@ kbd.plus{background:none;border:none;color:var(--light-gray-70);font-size:14px;p
 <div class="main-tabs">
   <button class="tab-btn active" onclick="switchTab('contenido',this)"><i class="fas fa-book-open"></i>Contenido del Curso</button>
   <button class="tab-btn" onclick="switchTab('apuntes',this)"><i class="fas fa-pencil-alt"></i>Apuntes &amp; Resumen</button>
+  <button class="tab-btn" onclick="switchTab('qr',this)"><i class="fas fa-qrcode"></i>Link &amp; QR</button>
 </div>
 
 <!-- TAB CONTENIDO -->
@@ -608,6 +657,91 @@ kbd.plus{background:none;border:none;color:var(--light-gray-70);font-size:14px;p
   </div>
 </div>
 
+<!-- TAB QR -->
+<div class="tab-panel" id="tab-qr">
+  <div class="qr-panel">
+
+    <div class="qr-hero">
+      <div class="qr-hero-icon"><i class="fas fa-qrcode"></i></div>
+      <h2>Accede al curso desde tu <span>movil</span></h2>
+      <p>Escanea el codigo QR con la camara de tu telefono y abre el curso directamente. Sin escribir nada.</p>
+    </div>
+
+    <div class="qr-grid">
+
+      <div class="qr-card qr-main-card">
+        <div class="qr-label"><i class="fas fa-mobile-alt"></i>Escanea con tu movil</div>
+        <div class="qr-img-wrap">
+          <img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&bgcolor=1a1a2e&color=4fc3f7&qzone=2&data=https%3A%2F%2Ftheealex11.github.io%2Fsubwebs%2FcursoBasico%2FcursoBasico.html" alt="Codigo QR del curso" onerror="this.src='https://chart.googleapis.com/chart?chs=260x260&cht=qr&chl=https%3A%2F%2Ftheealex11.github.io%2Fsubwebs%2FcursoBasico%2FcursoBasico.html&choe=UTF-8'">
+        </div>
+        <div class="qr-steps">
+          <div class="qr-step"><span class="qr-step-num">1</span><span>Abre la camara del movil</span></div>
+          <div class="qr-step"><span class="qr-step-num">2</span><span>Apunta al codigo QR</span></div>
+          <div class="qr-step"><span class="qr-step-num">3</span><span>Pulsa el enlace que aparece</span></div>
+        </div>
+      </div>
+
+      <div class="qr-side">
+        <div class="qr-url-card">
+          <div class="qr-url-label"><i class="fas fa-link"></i>Direccion del curso</div>
+          <div class="qr-url-box">
+            <span id="qrUrlText">theealex11.github.io/subwebs/cursoBasico/cursoBasico.html</span>
+            <button class="qr-copy-btn" onclick="copyURL()" title="Copiar enlace">
+              <i class="fas fa-copy" id="copyIcon"></i>
+            </button>
+          </div>
+          <a class="qr-open-btn" href="https://theealex11.github.io/subwebs/cursoBasico/cursoBasico.html" target="_blank">
+            <i class="fas fa-external-link-alt"></i>Abrir en el navegador
+          </a>
+        </div>
+
+        <div class="qr-info-card">
+          <div class="qr-info-title"><i class="fas fa-lightbulb"></i>Como escanear segun tu movil</div>
+          <div class="qr-device-list">
+            <div class="qr-device">
+              <i class="fab fa-apple"></i>
+              <div>
+                <strong>iPhone (iOS)</strong>
+                <span>Abre la app Camara, apunta al QR y pulsa la notificacion que aparece arriba.</span>
+              </div>
+            </div>
+            <div class="qr-device">
+              <i class="fab fa-android"></i>
+              <div>
+                <strong>Android</strong>
+                <span>Abre la Camara o Google Lens (el icono de lupa), apunta al QR y pulsa el enlace.</span>
+              </div>
+            </div>
+            <div class="qr-device">
+              <i class="fab fa-whatsapp"></i>
+              <div>
+                <strong>Sin camara QR</strong>
+                <span>Abre WhatsApp, ve a los tres puntos y busca la opcion "Lector de codigos QR".</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="qr-share-card">
+          <div class="qr-info-title"><i class="fas fa-share-alt"></i>Compartir con los alumnos</div>
+          <div class="qr-share-btns">
+            <a class="qr-share-btn whatsapp" href="https://wa.me/?text=Accede%20al%20curso%20de%20Informatica%20para%20Todos%3A%20https%3A%2F%2Ftheealex11.github.io%2Fsubwebs%2FcursoBasico%2FcursoBasico.html" target="_blank">
+              <i class="fab fa-whatsapp"></i>WhatsApp
+            </a>
+            <a class="qr-share-btn email" href="mailto:?subject=Curso%20Informatica%20para%20Todos&body=Accede%20al%20curso%20aqui%3A%20https%3A%2F%2Ftheealex11.github.io%2Fsubwebs%2FcursoBasico%2FcursoBasico.html" target="_blank">
+              <i class="fas fa-envelope"></i>Email
+            </a>
+            <button class="qr-share-btn copy" onclick="copyURL()">
+              <i class="fas fa-copy"></i>Copiar link
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <footer class="course-footer">
   <p>Curso preparado por <strong>Alejandro Bautista Jorge</strong> · Desarrollador Web · Olivenza, España</p>
   <p style="margin-top:5px;">¿Dudas? <strong>alexbaujor@gmail.com</strong> · <a href="https://theealex11.github.io" target="_blank">theealex11.github.io</a></p>
@@ -803,6 +937,22 @@ function checkURL() {
   result.style.display = 'block';
 }
 document.getElementById('urlInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') checkURL(); });
+
+function copyURL() {
+  var url = 'https://theealex11.github.io/subwebs/cursoBasico/cursoBasico.html';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() { showCopied(); });
+  } else {
+    var t = document.createElement('textarea');
+    t.value = url; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); document.body.removeChild(t);
+    showCopied();
+  }
+}
+function showCopied() {
+  var icon = document.getElementById('copyIcon');
+  if (icon) { icon.className = 'fas fa-check'; setTimeout(function() { icon.className = 'fas fa-copy'; }, 2000); }
+}
 </script>
 </body>
 </html>
