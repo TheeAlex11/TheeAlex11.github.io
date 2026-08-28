@@ -144,16 +144,21 @@ const pages = document.querySelectorAll("[data-page]");
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
 
+    const targetPage = this.dataset.goto || (this.querySelector("span") || this).innerText.toLowerCase();
+
     for (let i = 0; i < pages.length; i++) {
-      const linkText = (this.querySelector("span") || this).innerText.toLowerCase();
-      if (linkText === pages[i].dataset.page) {
+      if (targetPage === pages[i].dataset.page) {
         pages[i].classList.add("active");
-        navigationLinks[i].classList.add("active");
         window.scrollTo(0, 0);
       } else {
         pages[i].classList.remove("active");
-        navigationLinks[i].classList.remove("active");
       }
+    }
+
+    // sync the "active" highlight only on the real navbar tabs
+    for (let i = 0; i < navigationLinks.length; i++) {
+      const navText = (navigationLinks[i].querySelector("span") || navigationLinks[i]).innerText.toLowerCase();
+      navigationLinks[i].classList.toggle("active", !navigationLinks[i].dataset.goto && navText === targetPage);
     }
 
   });
@@ -174,3 +179,78 @@ window.addEventListener("load", function () {
 
   }, 2000); // 2 segundos de preloader
 });
+
+
+
+// budget-choice popup ("¿Por dónde quieres contactarme?")
+const budgetBtns = document.querySelectorAll("[data-budget-btn]");
+const budgetModalContainer = document.querySelector("[data-budget-modal-container]");
+const budgetOverlay = document.querySelector("[data-budget-overlay]");
+const budgetCloseBtn = document.querySelector("[data-budget-close-btn]");
+const budgetFormBtn = document.querySelector("[data-budget-form-btn]");
+
+const budgetModalFunc = function () {
+  budgetModalContainer.classList.toggle("active");
+  budgetOverlay.classList.toggle("active");
+}
+
+for (let i = 0; i < budgetBtns.length; i++) {
+  budgetBtns[i].addEventListener("click", budgetModalFunc);
+}
+
+if (budgetCloseBtn) budgetCloseBtn.addEventListener("click", budgetModalFunc);
+if (budgetOverlay) budgetOverlay.addEventListener("click", budgetModalFunc);
+
+if (budgetFormBtn) {
+  budgetFormBtn.addEventListener("click", function () {
+
+    budgetModalFunc();
+
+    for (let i = 0; i < pages.length; i++) {
+      if (pages[i].dataset.page === "contacto") {
+        pages[i].classList.add("active");
+        window.scrollTo(0, 0);
+      } else {
+        pages[i].classList.remove("active");
+      }
+    }
+
+    for (let i = 0; i < navigationLinks.length; i++) {
+      const navText = (navigationLinks[i].querySelector("span") || navigationLinks[i]).innerText.toLowerCase();
+      navigationLinks[i].classList.toggle("active", !navigationLinks[i].dataset.goto && navText === "contacto");
+    }
+
+  });
+}
+
+
+
+// whatsapp widget variables
+const whatsappToggleBtn = document.querySelector("[data-whatsapp-toggle]");
+const whatsappCloseBtn = document.querySelector("[data-whatsapp-close]");
+const whatsappPopup = document.querySelector("[data-whatsapp-popup]");
+
+if (whatsappToggleBtn && whatsappPopup) {
+
+  whatsappToggleBtn.addEventListener("click", function () {
+    whatsappPopup.classList.toggle("active");
+    whatsappToggleBtn.classList.toggle("active");
+  });
+
+  if (whatsappCloseBtn) {
+    whatsappCloseBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      whatsappPopup.classList.remove("active");
+      whatsappToggleBtn.classList.remove("active");
+    });
+  }
+
+  // abre el popup automáticamente una vez, tras la carga, para llamar la atención
+  window.addEventListener("load", function () {
+    setTimeout(() => {
+      whatsappPopup.classList.add("active");
+      whatsappToggleBtn.classList.add("active");
+    }, 4000);
+  });
+
+}
